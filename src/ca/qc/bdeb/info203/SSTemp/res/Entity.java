@@ -58,7 +58,7 @@ public abstract class Entity {
     }
 
     /**
-     * Constructeur d'Entite #2 - Avec SpriteSheet
+     * Constructeur d'Entite avec SpriteSheet
      * @param x position de l'entité dans l'écran - x
      * @param y position de l'entité dans l'écran - y
      * @param spriteSheet SpriteSheet qui contient l'image
@@ -74,12 +74,14 @@ public abstract class Entity {
     }
     
     /**
-     * Constructeur d'Entite #2 - Avec SpriteSheet
+     * Constructeur d'Entite avec SpriteSheet si les images ne sont pas toutes la même taille
      * @param x position de l'entité dans l'écran - x
      * @param y position de l'entité dans l'écran - y
      * @param spriteSheet SpriteSheet qui contient l'image
      * @param ligne la ligne dans le SpriteSheet de l'image
      * @param colonne la colonne dans le SpriteSheet de l'image
+     * @param width la longueur de l'image dans le SpriteSheet
+     * @param height la heuteur de l'image dans le SpriteSheet
      */
     public Entity(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne, int width, int height) {
         this.x = x;
