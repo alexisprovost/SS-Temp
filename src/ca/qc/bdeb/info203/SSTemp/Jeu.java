@@ -1,6 +1,6 @@
 package ca.qc.bdeb.info203.SSTemp;
 
-import ca.qc.bdeb.info203.SSTemp.res.Entite;
+import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
 import java.util.ArrayList;
 import org.newdawn.slick.BasicGame;
@@ -26,7 +26,7 @@ public class Jeu extends BasicGame {
     /**
      * Toutes les entités.
      */
-    private ArrayList<Entite> entites = new ArrayList<>();
+    private ArrayList<Entity> entites = new ArrayList<>();
     /**
      * Les touches enfoncées.
      */

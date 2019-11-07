@@ -11,7 +11,7 @@ import org.newdawn.slick.SpriteSheet;
  * @author Mathieu Grenon, Stéphane Lévesque
  * 
  */
-public abstract class Entite {
+public abstract class Entity {
     /**
      * Coordonnée X
      */
@@ -45,7 +45,7 @@ public abstract class Entite {
      * @param height hauteur de l'image 
      * @param imagepath chemin d'accès de l'image sur le disque
      */
-    public Entite(int x, int y, int width, int height, String imagepath) {
+    public Entity(int x, int y, int width, int height, String imagepath) {
         this.x = x;
         this.y = y;
         try {
@@ -65,10 +65,26 @@ public abstract class Entite {
      * @param ligne la ligne dans le SpriteSheet de l'image
      * @param colonne la colonne dans le SpriteSheet de l'image
      */
-    public Entite(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne) {
+    public Entity(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne) {
         this.x = x;
         this.y = y;
         this.image = spriteSheet.getSubImage(ligne, colonne);
+        this.width = image.getWidth();
+        this.height = image.getHeight();
+    }
+    
+    /**
+     * Constructeur d'Entite #2 - Avec SpriteSheet
+     * @param x position de l'entité dans l'écran - x
+     * @param y position de l'entité dans l'écran - y
+     * @param spriteSheet SpriteSheet qui contient l'image
+     * @param ligne la ligne dans le SpriteSheet de l'image
+     * @param colonne la colonne dans le SpriteSheet de l'image
+     */
+    public Entity(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.image = spriteSheet.getSubImage(ligne, colonne, width, height);
         this.width = image.getWidth();
         this.height = image.getHeight();
     }
@@ -81,7 +97,7 @@ public abstract class Entite {
      * @param width  largeur de l'image
      * @param height hauteur de l'image
      */
-    public Entite(int x, int y, int width, int height) {
+    public Entity(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
