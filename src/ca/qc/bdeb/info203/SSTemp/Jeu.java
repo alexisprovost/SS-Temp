@@ -1,5 +1,6 @@
 package ca.qc.bdeb.info203.SSTemp;
 
+import ca.qc.bdeb.info203.SSTemp.entity.Bullet;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 /**
  *
@@ -43,7 +45,7 @@ public class Jeu extends BasicGame {
      * Heuteur de l'écran.
      */
     private int hauteurEcran;
-    
+
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
         this.largeurEcran = largeur;
@@ -59,9 +61,9 @@ public class Jeu extends BasicGame {
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
-        
+
     }
-    
+
     @Override
     public void keyReleased(int key, char c) {
         switch (key) {

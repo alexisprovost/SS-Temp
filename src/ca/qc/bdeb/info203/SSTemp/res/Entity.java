@@ -8,10 +8,12 @@ import org.newdawn.slick.SpriteSheet;
 
 /**
  * Entité du jeu.
+ *
  * @author Mathieu Grenon, Stéphane Lévesque
- * 
+ *
  */
 public abstract class Entity {
+
     /**
      * Coordonnée X
      */
@@ -39,10 +41,11 @@ public abstract class Entity {
 
     /**
      * Constructeur d'Entite avec image sur le disque
+     *
      * @param x position de l'entité dans l'écran - x
      * @param y position de l'entité dans l'écran - y
      * @param width largeur de l'image
-     * @param height hauteur de l'image 
+     * @param height hauteur de l'image
      * @param imagepath chemin d'accès de l'image sur le disque
      */
     public Entity(int x, int y, int width, int height, String imagepath) {
@@ -59,6 +62,7 @@ public abstract class Entity {
 
     /**
      * Constructeur d'Entite avec SpriteSheet
+     *
      * @param x position de l'entité dans l'écran - x
      * @param y position de l'entité dans l'écran - y
      * @param spriteSheet SpriteSheet qui contient l'image
@@ -68,13 +72,15 @@ public abstract class Entity {
     public Entity(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne) {
         this.x = x;
         this.y = y;
-        this.image = spriteSheet.getSubImage(ligne, colonne);
+        this.image = spriteSheet.getSubImage(colonne, ligne);
         this.width = image.getWidth();
         this.height = image.getHeight();
     }
-    
+
     /**
-     * Constructeur d'Entite avec SpriteSheet si les images ne sont pas toutes la même taille
+     * Constructeur d'Entite avec SpriteSheet si les images ne sont pas toutes
+     * la même taille
+     *
      * @param x position de l'entité dans l'écran - x
      * @param y position de l'entité dans l'écran - y
      * @param spriteSheet SpriteSheet qui contient l'image
@@ -86,17 +92,17 @@ public abstract class Entity {
     public Entity(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne, int width, int height) {
         this.x = x;
         this.y = y;
-        this.image = spriteSheet.getSubImage(ligne, colonne, width, height);
+        this.image = spriteSheet.getSubImage(colonne, ligne, width, height);
         this.width = image.getWidth();
         this.height = image.getHeight();
     }
-    
+
     /**
      * Constructeur d'Entite sans fichier d'image
      *
-     * @param x      position de l'entité dans l'écran - x
-     * @param y      position de l'entité dans l'écran - y
-     * @param width  largeur de l'image
+     * @param x position de l'entité dans l'écran - x
+     * @param y position de l'entité dans l'écran - y
+     * @param width largeur de l'image
      * @param height hauteur de l'image
      */
     public Entity(int x, int y, int width, int height) {
@@ -126,8 +132,16 @@ public abstract class Entity {
         return image;
     }
 
-    public Rectangle getRectangle(){
-       return new Rectangle(x, y, width, height);
+    public Rectangle getRectangle() {
+        return new Rectangle(x, y, width, height);
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public void setImage(SpriteSheet spriteSheet, int ligne, int colonne) {
+        this.image = spriteSheet.getSubImage(colonne, ligne);
     }
 
     public void setLocation(int x, int y) {
@@ -135,17 +149,19 @@ public abstract class Entity {
         this.y = y;
     }
 
-    public boolean getDetruire(){
+    public boolean getDetruire() {
         return detruire;
     }
 
     public void setDetruire(boolean detruire) {
         this.detruire = detruire;
     }
-    
+
     /**
      * Dessine l'entité dans l'interface.
-     * @param g L'objet Graphics à utiliser pour dessiner dans la fenêtre de l'application.
+     *
+     * @param g L'objet Graphics à utiliser pour dessiner dans la fenêtre de
+     * l'application.
      */
     public abstract void dessiner(Graphics g);
 }
