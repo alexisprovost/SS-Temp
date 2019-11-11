@@ -63,7 +63,7 @@ public class Jeu extends BasicGame {
         //Load sprites
         try {
             //16x16?
-            asteroidSpriteSheet = new SpriteSheet("sprites/AsteroidSpriteSheet.png", 16, 16);
+            asteroidSpriteSheet = new SpriteSheet("sprites/AsteroidSpriteSheetT.png", 16, 16);
         } catch (SlickException e) {
             System.out.println("SlickException :" + e);
         } catch (RuntimeException e) {
@@ -71,7 +71,7 @@ public class Jeu extends BasicGame {
         }
 
         //Spawn Entity Asteroid (For Testing)
-        asteroid = new Asteroid(0, 0, asteroidSpriteSheet, 16, 64, 256, 256);
+        asteroid = new Asteroid(0, 0, asteroidSpriteSheet, 0, 0, 256, 256);
         entites.add(asteroid);
         mobiles.add(asteroid);
     }
