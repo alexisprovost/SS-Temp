@@ -23,8 +23,8 @@ public class Main {
     public static void main(String[] args) {
         try {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            screenWidth = (int)screenSize.getWidth();
-            screenHeight = (int)screenSize.getHeight();
+            screenWidth = (int)screenSize.getWidth()/2;
+            screenHeight = (int)screenSize.getHeight()/2;
             AppGameContainer app = new AppGameContainer(new Jeu(screenWidth, screenHeight));
             app.setDisplayMode(screenWidth, screenHeight, false);
             app.setShowFPS(false);

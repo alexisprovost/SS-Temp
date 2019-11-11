@@ -1,5 +1,6 @@
 package ca.qc.bdeb.info203.SSTemp;
 
+import ca.qc.bdeb.info203.SSTemp.entity.Asteroid;
 import ca.qc.bdeb.info203.SSTemp.entity.Bullet;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
@@ -46,6 +47,10 @@ public class Jeu extends BasicGame {
      */
     private int hauteurEcran;
 
+    private Asteroid asteroid;
+
+    private SpriteSheet asteroidSpriteSheet;
+
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
         this.largeurEcran = largeur;
@@ -54,6 +59,21 @@ public class Jeu extends BasicGame {
 
     public void init(GameContainer container) throws SlickException {
         this.container = container;
+
+        //Load sprites
+        try {
+            //16x16?
+            asteroidSpriteSheet = new SpriteSheet("sprites/AsteroidSpriteSheet.png", 16, 16);
+        } catch (SlickException e) {
+            System.out.println("SlickException :" + e);
+        } catch (RuntimeException e) {
+            System.out.println("Error Sprite File Not Found!");
+        }
+
+        //Spawn Entity Asteroid (For Testing)
+        asteroid = new Asteroid(0, 0, asteroidSpriteSheet, 16, 64, 256, 256);
+        entites.add(asteroid);
+        mobiles.add(asteroid);
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -61,7 +81,9 @@ public class Jeu extends BasicGame {
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
-
+        for (Entity entite : entites) {
+            entite.dessiner(g);
+        }
     }
 
     @Override
