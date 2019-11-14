@@ -2,6 +2,7 @@ package ca.qc.bdeb.info203.SSTemp;
 
 import ca.qc.bdeb.info203.SSTemp.entity.Asteroid;
 import ca.qc.bdeb.info203.SSTemp.entity.Bullet;
+import ca.qc.bdeb.info203.SSTemp.entity.Player;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
 import java.util.ArrayList;
@@ -46,10 +47,16 @@ public class Jeu extends BasicGame {
      * Heuteur de l'écran.
      */
     private int hauteurEcran;
-
-    private Asteroid asteroid;
+    
+    private SpriteSheet playerSpriteSheet;
 
     private SpriteSheet asteroidSpriteSheet;
+    
+    private SpriteSheet bulletSpriteSheet;
+    
+    private Player player;
+
+    
 
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
@@ -59,21 +66,18 @@ public class Jeu extends BasicGame {
 
     public void init(GameContainer container) throws SlickException {
         this.container = container;
-
         //Load sprites
         try {
-            //16x16?
-            asteroidSpriteSheet = new SpriteSheet("sprites/AsteroidSpriteSheetT.png", 16, 16);
+            playerSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerSpriteSheet.png", 128, 128);
+            asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheetT.png", 16, 16);
+            bulletSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/BulletSpriteSheet.png", 16, 16);
         } catch (SlickException e) {
             System.out.println("SlickException :" + e);
-        } catch (RuntimeException e) {
-            System.out.println("Error Sprite File Not Found!");
         }
 
-        //Spawn Entity Asteroid (For Testing)
-        asteroid = new Asteroid(0, 0, asteroidSpriteSheet, 0, 0, 256, 256);
-        entites.add(asteroid);
-        mobiles.add(asteroid);
+        player = new Player(0, 0, playerSpriteSheet, 0, 0);
+        entites.add(player);
+        mobiles.add(player);
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -84,6 +88,10 @@ public class Jeu extends BasicGame {
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
+    }
+    
+    private void getKeys(){
+        
     }
 
     @Override
