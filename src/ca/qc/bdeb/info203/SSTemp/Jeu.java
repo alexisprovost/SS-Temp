@@ -5,6 +5,8 @@ import ca.qc.bdeb.info203.SSTemp.entity.Bullet;
 import ca.qc.bdeb.info203.SSTemp.entity.Player;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
+import com.sun.jdi.connect.spi.TransportService;
+import static java.lang.System.gc;
 import java.util.ArrayList;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -32,14 +34,6 @@ public class Jeu extends BasicGame {
      */
     private ArrayList<Entity> entites = new ArrayList<>();
     /**
-     * Les touches enfoncées.
-     */
-    private ArrayList<Integer> touches = new ArrayList<>(); // 
-    /**
-     * L’entrée (souris/touches de clavier, etc.)
-     */
-    private Input input;
-    /**
      * Largeur de l'écran.
      */
     private int largeurEcran;
@@ -66,9 +60,9 @@ public class Jeu extends BasicGame {
 
     public void init(GameContainer container) throws SlickException {
         this.container = container;
-        //Load sprites
+        
         try {
-            playerSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerSpriteSheet.png", 128, 128);
+            playerSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerSpriteSheet.png", 96, 128);
             asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheetT.png", 16, 16);
             bulletSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/BulletSpriteSheet.png", 16, 16);
         } catch (SlickException e) {
@@ -81,7 +75,7 @@ public class Jeu extends BasicGame {
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
-
+        player.bouger(0, 0);
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -89,16 +83,42 @@ public class Jeu extends BasicGame {
             entite.dessiner(g);
         }
     }
-    
-    private void getKeys(){
-        
-    }
 
+    @Override
+    public void keyPressed(int key, char c) {
+        switch (key) {
+            case Input.KEY_W:
+                player.moveUp(true);
+                break;
+            case Input.KEY_S:
+                player.moveDown(true);
+                break;
+            case Input.KEY_A:
+                player.moveLeft(true);
+                break;
+            case Input.KEY_D:
+                player.moveRight(true);
+                break;
+        }
+    }
+    
     @Override
     public void keyReleased(int key, char c) {
         switch (key) {
             case Input.KEY_ESCAPE:
                 container.exit();
+                break;
+            case Input.KEY_W:
+                player.moveUp(false);
+                break;
+            case Input.KEY_S:
+                player.moveDown(false);
+                break;
+            case Input.KEY_A:
+                player.moveLeft(false);
+                break;
+            case Input.KEY_D:
+                player.moveRight(false);
                 break;
         }
     }
