@@ -41,16 +41,18 @@ public class Jeu extends BasicGame {
      * Heuteur de l'écran.
      */
     private int hauteurEcran;
-    
-    private SpriteSheet playerSpriteSheet;
+
+    private SpriteSheet playerBodySpriteSheet;
+
+    private SpriteSheet playerCoreLaserSpriteSheet;
+
+    private SpriteSheet playerCoreEffectSpriteSheet;
+
+    private SpriteSheet playerPropulsorSpriteSheet;
 
     private SpriteSheet asteroidSpriteSheet;
-    
-    private SpriteSheet bulletSpriteSheet;
-    
-    private Player player;
 
-    
+    private Player player;
 
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
@@ -60,16 +62,10 @@ public class Jeu extends BasicGame {
 
     public void init(GameContainer container) throws SlickException {
         this.container = container;
-        
-        try {
-            playerSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerSpriteSheet.png", 96, 128);
-            asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheetT.png", 16, 16);
-            bulletSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/BulletSpriteSheet.png", 16, 16);
-        } catch (SlickException e) {
-            System.out.println("SlickException :" + e);
-        }
 
-        player = new Player(0, 0, playerSpriteSheet, 0, 0);
+        loadSprites();
+
+        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerPropulsorSpriteSheet);
         entites.add(player);
         mobiles.add(player);
     }
@@ -101,7 +97,7 @@ public class Jeu extends BasicGame {
                 break;
         }
     }
-    
+
     @Override
     public void keyReleased(int key, char c) {
         switch (key) {
@@ -120,6 +116,18 @@ public class Jeu extends BasicGame {
             case Input.KEY_D:
                 player.moveRight(false);
                 break;
+        }
+    }
+
+    private void loadSprites() {
+        try {
+            playerBodySpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerBodySpriteSheet.png", 76, 123);
+            playerCoreLaserSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreLaserSpriteSheet.png", 16, 71);
+            playerCoreEffectSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreEffectSpriteSheet.png", 30, 19);
+            playerPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerPropulsorSpriteSheet.png", 34, 56);
+            asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheet.png", 16, 16);
+        } catch (SlickException se) {
+            System.out.println("SlickException :" + se);
         }
     }
 }
