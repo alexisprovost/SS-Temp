@@ -89,7 +89,7 @@ public abstract class Entity {
      * @param width la longueur de l'image dans le SpriteSheet
      * @param height la heuteur de l'image dans le SpriteSheet
      */
-    public Entity(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne, int width, int height) {
+    public Entity(int x, int y, SpriteSheet spriteSheet, int colonne, int ligne, int width, int height) {
         this.x = x;
         this.y = y;
         this.image = spriteSheet.getSubImage(colonne, ligne, width, height);
@@ -140,7 +140,7 @@ public abstract class Entity {
         this.image = image;
     }
 
-    public void setImage(SpriteSheet spriteSheet, int ligne, int colonne) {
+    public void setImage(SpriteSheet spriteSheet, int colonne, int ligne) {
         this.image = spriteSheet.getSubImage(colonne, ligne);
     }
 

@@ -9,8 +9,10 @@ import com.sun.jdi.connect.spi.TransportService;
 import static java.lang.System.gc;
 import java.util.ArrayList;
 import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -53,6 +55,9 @@ public class Jeu extends BasicGame {
     private SpriteSheet asteroidSpriteSheet;
 
     private Player player;
+    private Asteroid asteroid;
+
+    private Image land;
 
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
@@ -63,21 +68,35 @@ public class Jeu extends BasicGame {
     public void init(GameContainer container) throws SlickException {
         this.container = container;
 
+        land = new Image("ca/qc/bdeb/info203/SSTemp/sprites/bg2.png");
+
         loadSprites();
 
         player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerPropulsorSpriteSheet);
         entites.add(player);
         mobiles.add(player);
+
+        asteroid = new Asteroid(250, 250, asteroidSpriteSheet, 512, 256, 64, 64);
+        entites.add(asteroid);
+        mobiles.add(asteroid);
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
         player.bouger(0, 0);
+        asteroid.bouger(0 ,largeurEcran);
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
+
+        g.drawImage(land, 0, 0);
+        
+        //g.setBackground(Color.yellow);
+
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
+        
+        
     }
 
     @Override
