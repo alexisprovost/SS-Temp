@@ -1,8 +1,7 @@
 package ca.qc.bdeb.info203.SSTemp.entity.playerParts;
 
+import ca.qc.bdeb.info203.SSTemp.res.PlayerPart;
 import ca.qc.bdeb.info203.SSTemp.entity.Player;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;

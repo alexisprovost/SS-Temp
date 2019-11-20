@@ -44,18 +44,12 @@ public abstract class Entity {
      *
      * @param x position de l'entité dans l'écran - x
      * @param y position de l'entité dans l'écran - y
-     * @param width largeur de l'image
-     * @param height hauteur de l'image
-     * @param imagepath chemin d'accès de l'image sur le disque
+     * @param image image de l'entite
      */
-    public Entity(int x, int y, int width, int height, String imagepath) {
+    public Entity(int x, int y, Image image) {
         this.x = x;
         this.y = y;
-        try {
-            image = new Image(imagepath);
-        } catch (SlickException e) {
-            System.out.println("Image non trouvée pour " + getClass());
-        }
+        this.image = image;
         this.width = image.getWidth();
         this.height = image.getHeight();
     }
@@ -69,7 +63,7 @@ public abstract class Entity {
      * @param ligne la ligne dans le SpriteSheet de l'image
      * @param colonne la colonne dans le SpriteSheet de l'image
      */
-    public Entity(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne) {
+    public Entity(int x, int y, SpriteSheet spriteSheet, int colonne, int ligne) {
         this.x = x;
         this.y = y;
         this.image = spriteSheet.getSubImage(colonne, ligne);

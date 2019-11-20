@@ -56,6 +56,8 @@ public class Jeu extends BasicGame {
 
     private SpriteSheet asteroidSpriteSheet;
 
+    private Image bulletImage;
+
     private Player player;
     private Asteroid asteroid;
 
@@ -74,7 +76,7 @@ public class Jeu extends BasicGame {
 
         loadSprites();
 
-        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet);
+        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImage);
         entites.add(player);
         mobiles.add(player);
 
@@ -84,14 +86,18 @@ public class Jeu extends BasicGame {
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
-        player.bouger(container.getWidth(), container.getHeight());
-        asteroid.bouger(0, largeurEcran);
+        for (Mobile mobile : mobiles) {
+            mobile.bouger(largeurEcran, hauteurEcran);
+        }
+        Bullet newBullet = player.shoot();
+        if (newBullet != null) {
+            entites.add(newBullet);
+            mobiles.add(newBullet);
+        }
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
-
         g.drawImage(land, 0, 0);
-
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
@@ -112,6 +118,9 @@ public class Jeu extends BasicGame {
                 break;
             case Input.KEY_D:
                 player.moveRight(true);
+                break;
+            case Input.KEY_SPACE:
+                player.shootBullet(true);
                 break;
         }
     }
@@ -134,6 +143,9 @@ public class Jeu extends BasicGame {
             case Input.KEY_D:
                 player.moveRight(false);
                 break;
+            case Input.KEY_SPACE:
+                player.shootBullet(false);
+                break;
         }
     }
 
@@ -145,6 +157,7 @@ public class Jeu extends BasicGame {
             playerRightPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerRightPropulsorSpriteSheet.png", 56, 34);
             playerLeftPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerLeftPropulsorSpriteSheet.png", 56, 34);
             asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheet.png", 16, 16);
+            bulletImage = new Image("ca/qc/bdeb/info203/SSTemp/sprites/Bullet.png");
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);
         }

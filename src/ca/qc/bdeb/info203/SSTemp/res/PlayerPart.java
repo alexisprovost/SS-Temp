@@ -1,4 +1,4 @@
-package ca.qc.bdeb.info203.SSTemp.entity.playerParts;
+package ca.qc.bdeb.info203.SSTemp.res;
 
 import ca.qc.bdeb.info203.SSTemp.entity.Player;
 import org.newdawn.slick.Graphics;

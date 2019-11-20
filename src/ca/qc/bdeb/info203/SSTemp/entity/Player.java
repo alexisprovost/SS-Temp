@@ -7,6 +7,7 @@ import ca.qc.bdeb.info203.SSTemp.entity.playerParts.Propulsor;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
 /**
@@ -28,17 +29,23 @@ public class Player extends Entity implements Mobile {
     private boolean moveDown;
     private boolean moveLeft;
     private boolean moveRight;
+    private boolean shootBullet;
+
+    private boolean bulletPending;
+
+    private Image bulletImage;
 
     private int speedX = 0;
     private int speedY = 0;
 
-    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet) {
+    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, Image bulletImage) {
         super(x, y, 128, 96);
         this.body = new Body(this, bodySpriteSheet, 22, 10);
         this.coreEffect = new CoreEffect(this, coreEffectSpriteSheet, 52, 33);
         this.coreLaser = new CoreLaser(this, coreLaserSpriteSheet, 57, 40);
         this.rightPropulsor = new Propulsor(this, rightPropulsorSpriteSheet, -20, 62);
         this.leftPropulsor = new Propulsor(this, leftPropulsorSpriteSheet, -20, 0);
+        this.bulletImage = bulletImage;
     }
 
     @Override
@@ -91,6 +98,20 @@ public class Player extends Entity implements Mobile {
         }
     }
 
+    public Bullet shoot() {
+        Bullet bullet = null;
+        if (!coreLaser.isShooting() && bulletPending) {
+            bulletPending = false;
+            bullet = new Bullet(getX(), getY(), bulletImage);
+            coreLaser.startTransition();
+        }
+        if (coreLaser.isIdle() && shootBullet) {
+            bulletPending = true;
+            coreLaser.startAnimation();
+        }
+        return bullet;
+    }
+
     public void moveUp(boolean moveUp) {
         this.moveUp = moveUp;
     }
@@ -105,5 +126,9 @@ public class Player extends Entity implements Mobile {
 
     public void moveRight(boolean moveRight) {
         this.moveRight = moveRight;
+    }
+
+    public void shootBullet(boolean shootBullet) {
+        this.shootBullet = shootBullet;
     }
 }
