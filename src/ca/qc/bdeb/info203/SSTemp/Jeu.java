@@ -72,7 +72,7 @@ public class Jeu extends BasicGame {
     public void init(GameContainer container) throws SlickException {
         this.container = container;
 
-        land = new Image("ca/qc/bdeb/info203/SSTemp/sprites/bg2.png");
+        land = new Image("ca/qc/bdeb/info203/SSTemp/sprites/bg4.png");
 
         loadSprites();
 
