@@ -50,7 +50,9 @@ public class Jeu extends BasicGame {
 
     private SpriteSheet playerCoreEffectSpriteSheet;
 
-    private SpriteSheet playerPropulsorSpriteSheet;
+    private SpriteSheet playerRightPropulsorSpriteSheet;
+
+    private SpriteSheet playerLeftPropulsorSpriteSheet;
 
     private SpriteSheet asteroidSpriteSheet;
 
@@ -72,7 +74,7 @@ public class Jeu extends BasicGame {
 
         loadSprites();
 
-        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerPropulsorSpriteSheet);
+        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet);
         entites.add(player);
         mobiles.add(player);
 
@@ -82,21 +84,18 @@ public class Jeu extends BasicGame {
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
-        player.bouger(0, 0);
-        asteroid.bouger(0 ,largeurEcran);
+        player.bouger(container.getWidth(), container.getHeight());
+        asteroid.bouger(0, largeurEcran);
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
 
         g.drawImage(land, 0, 0);
-        
-        //g.setBackground(Color.yellow);
 
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
-        
-        
+
     }
 
     @Override
@@ -140,10 +139,11 @@ public class Jeu extends BasicGame {
 
     private void loadSprites() {
         try {
-            playerBodySpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerBodySpriteSheet.png", 76, 123);
-            playerCoreLaserSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreLaserSpriteSheet.png", 16, 71);
-            playerCoreEffectSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreEffectSpriteSheet.png", 30, 19);
-            playerPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerPropulsorSpriteSheet.png", 34, 56);
+            playerBodySpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerBodySpriteSheet.png", 123, 76);
+            playerCoreLaserSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreLaserSpriteSheet.png", 71, 16);
+            playerCoreEffectSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreEffectSpriteSheet.png", 19, 30);
+            playerRightPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerRightPropulsorSpriteSheet.png", 56, 34);
+            playerLeftPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerLeftPropulsorSpriteSheet.png", 56, 34);
             asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheet.png", 16, 16);
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);

@@ -3,11 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/1850986/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/Bullet.java</file>
-            <file>file:/C:/Users/1850986/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/Main.java</file>
-            <file>file:/C:/Users/1850986/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/Asteroid.java</file>
-            <file>file:/C:/Users/1850986/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/res/Entity.java</file>
-            <file>file:/C:/Users/1850986/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/Jeu.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/playerParts/Body.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/Asteroid.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/playerParts/CoreEffect.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/Bullet.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/playerParts/PlayerPart.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/playerParts/Propulsor.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/Player.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/Jeu.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/entity/playerParts/CoreLaser.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/Main.java</file>
         </group>
     </open-files>
 </project-private>
