@@ -3,6 +3,7 @@ package ca.qc.bdeb.info203.SSTemp.res;
 import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 /**
@@ -45,10 +46,15 @@ public abstract class Entity {
      * @param y position de l'entité dans l'écran - y
      * @param image image de l'entite
      */
-    public Entity(int x, int y, Image image) {
+    public Entity(int x, int y, String imagePath) {
         this.x = x;
         this.y = y;
-        this.image = image;
+        try {
+            this.image = new Image(imagePath);
+        } catch (SlickException se) {
+            System.out.println("SlickException :" + se);
+            System.exit(1);
+        }
         this.width = image.getWidth();
         this.height = image.getHeight();
     }

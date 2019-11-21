@@ -6,8 +6,8 @@ import ca.qc.bdeb.info203.SSTemp.entity.playerParts.CoreLaser;
 import ca.qc.bdeb.info203.SSTemp.entity.playerParts.Propulsor;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
 /**
@@ -33,19 +33,19 @@ public class Player extends Entity implements Mobile {
 
     private boolean bulletPending;
 
-    private Image bulletImage;
+    private String bulletImagePath;
 
     private int speedX = 0;
     private int speedY = 0;
 
-    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, Image bulletImage) {
+    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, String bulletImagePath) {
         super(x, y, 128, 96);
         this.body = new Body(this, bodySpriteSheet, 22, 10);
         this.coreEffect = new CoreEffect(this, coreEffectSpriteSheet, 52, 33);
         this.coreLaser = new CoreLaser(this, coreLaserSpriteSheet, 57, 40);
         this.rightPropulsor = new Propulsor(this, rightPropulsorSpriteSheet, -20, 62);
         this.leftPropulsor = new Propulsor(this, leftPropulsorSpriteSheet, -20, 0);
-        this.bulletImage = bulletImage;
+        this.bulletImagePath = bulletImagePath;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class Player extends Entity implements Mobile {
         Bullet bullet = null;
         if (!coreLaser.isShooting() && bulletPending) {
             bulletPending = false;
-            bullet = new Bullet(getX(), getY(), bulletImage);
+            bullet = new Bullet(getX(), getY(), bulletImagePath);
             coreLaser.startTransition();
         }
         if (coreLaser.isIdle() && shootBullet) {
