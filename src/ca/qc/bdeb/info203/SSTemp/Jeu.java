@@ -5,11 +5,8 @@ import ca.qc.bdeb.info203.SSTemp.entity.Bullet;
 import ca.qc.bdeb.info203.SSTemp.entity.Player;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
-import com.sun.jdi.connect.spi.TransportService;
-import static java.lang.System.gc;
 import java.util.ArrayList;
 import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -35,6 +32,8 @@ public class Jeu extends BasicGame {
      * Toutes les entités.
      */
     private ArrayList<Entity> entites = new ArrayList<>();
+    
+    private ArrayList<Entity> aDetruire = new ArrayList<>();
     /**
      * Largeur de l'écran.
      */
@@ -72,7 +71,7 @@ public class Jeu extends BasicGame {
     public void init(GameContainer container) throws SlickException {
         this.container = container;
 
-        land = new Image("ca/qc/bdeb/info203/SSTemp/sprites/bg4.png");
+        land = new Image("ca/qc/bdeb/info203/SSTemp/sprites/bg2.png");
 
         loadSprites();
 
@@ -94,6 +93,7 @@ public class Jeu extends BasicGame {
             entites.add(newBullet);
             mobiles.add(newBullet);
         }
+        detruireEntites();
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -160,6 +160,20 @@ public class Jeu extends BasicGame {
             bulletImage = new Image("ca/qc/bdeb/info203/SSTemp/sprites/Bullet.png");
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);
+        }
+    }
+    
+    private void detruireEntites(){
+        for (Entity entite : entites) {
+            if(entite.getDetruire()){
+                aDetruire.add(entite);
+            }
+        }
+        for (Entity entite : aDetruire){
+            entites.remove(entite);
+            if(entite instanceof Mobile){
+                mobiles.remove((Mobile)entite);  
+            }
         }
     }
 }

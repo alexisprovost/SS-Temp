@@ -12,9 +12,11 @@ import org.newdawn.slick.Image;
 public class Bullet extends Entity implements Mobile {
 
     private final int SPEED = 15;
+    private final int INITIAL_X;
 
     public Bullet(int x, int y, Image image) {
         super(x + 92, y + 44, image);
+        this.INITIAL_X = x + 92;
     }
 
     @Override
@@ -25,5 +27,8 @@ public class Bullet extends Entity implements Mobile {
     @Override
     public void bouger(int limiteX, int limiteY) {
         setLocation(getX() + SPEED, getY());
+        if(getX() >= this.INITIAL_X + (limiteX/2)){
+            setDetruire(true);
+        }
     }
 }
