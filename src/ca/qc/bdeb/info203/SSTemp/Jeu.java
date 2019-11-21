@@ -6,6 +6,7 @@ import ca.qc.bdeb.info203.SSTemp.entity.Player;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
 import java.util.ArrayList;
+import java.util.Random;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -32,7 +33,7 @@ public class Jeu extends BasicGame {
      * Toutes les entités.
      */
     private ArrayList<Entity> entites = new ArrayList<>();
-    
+
     private ArrayList<Entity> aDetruire = new ArrayList<>();
     /**
      * Largeur de l'écran.
@@ -58,7 +59,6 @@ public class Jeu extends BasicGame {
     private Image bulletImage;
 
     private Player player;
-    private Asteroid asteroid;
 
     private Image land;
 
@@ -79,9 +79,13 @@ public class Jeu extends BasicGame {
         entites.add(player);
         mobiles.add(player);
 
-        asteroid = new Asteroid(250, 250, asteroidSpriteSheet, 512, 256, 64, 64);
-        entites.add(asteroid);
-        mobiles.add(asteroid);
+        for (int i = 0; i < 20; i++) {
+            Random rnd = new Random();
+            Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64);
+            entites.add(asteroid);
+            mobiles.add(asteroid);
+        }
+
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -93,6 +97,21 @@ public class Jeu extends BasicGame {
             entites.add(newBullet);
             mobiles.add(newBullet);
         }
+
+        for (Entity entite : entites) {
+            if (entite instanceof Bullet) {
+                for (Entity entite2 : entites) {
+                    if (entite2 instanceof Asteroid) {
+                        if (entite.getRectangle().intersects(entite2.getRectangle())) {
+                            entite2.setDetruire(true);
+                            entite.setDetruire(true);
+                            System.out.println("Delete");
+                        }
+                    }
+                }
+            }
+        }
+
         detruireEntites();
     }
 
@@ -162,18 +181,23 @@ public class Jeu extends BasicGame {
             System.out.println("SlickException :" + se);
         }
     }
-    
-    private void detruireEntites(){
+
+    private void detruireEntites() {
         for (Entity entite : entites) {
-            if(entite.getDetruire()){
+            if (entite.getDetruire()) {
                 aDetruire.add(entite);
             }
         }
-        for (Entity entite : aDetruire){
-            entites.remove(entite);
-            if(entite instanceof Mobile){
-                mobiles.remove((Mobile)entite);  
+        entites.removeAll(aDetruire);
+        mobiles.removeAll(aDetruire);
+        for (Entity entite : aDetruire) {
+            if (entite instanceof Asteroid) {
+                Random rnd = new Random();
+                Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64);
+                entites.add(asteroid);
+                mobiles.add(asteroid);
             }
         }
+        aDetruire.clear();
     }
 }
