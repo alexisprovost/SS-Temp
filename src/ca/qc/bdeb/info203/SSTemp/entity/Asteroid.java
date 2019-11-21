@@ -2,18 +2,31 @@ package ca.qc.bdeb.info203.SSTemp.entity;
 
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
-import org.newdawn.slick.Animation;
+import java.util.Random;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
 
 public class Asteroid extends Entity implements Mobile {
 
     private SpriteSheet spriteSheet;
-    private Animation animationIdle;
+    private int xSpeed;
+    private int ySpeed;
+    private int maxSpeed = 5;
+    private int extraSpace = 300;
 
     public Asteroid(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne, int width, int height) {
         super(x, y, spriteSheet, ligne, colonne, width, height);
         this.spriteSheet = spriteSheet;
+        
+        Random rnd = new Random();
+        
+        xSpeed = -rnd.nextInt(maxSpeed);
+        
+        if(rnd.nextInt(2) == 1){
+            ySpeed = -rnd.nextInt(maxSpeed);
+        }else{
+            ySpeed = rnd.nextInt(maxSpeed);
+        }
     }
 
     @Override
@@ -23,7 +36,25 @@ public class Asteroid extends Entity implements Mobile {
 
     @Override
     public void bouger(int limiteX, int limiteY) {
-            setLocation(getX() + 1, getY());
+        if (getX() + getWidth() >= limiteX+extraSpace) {   
+            xSpeed *= -1;
+        } 
+        
+        if (getY() + getHeight()>= limiteY+extraSpace) {   
+            setDetruire(true);
+        }
+
+        if (getX() <= -extraSpace) {
+            setDetruire(true);
+        }
+        
+        if (getY() <= -extraSpace) {
+            ySpeed *= -1;
+        }
+        
+        getImage().setRotation(getImage().getRotation()+ 1);
+        
+        setLocation(getX() + xSpeed, getY() + ySpeed);
     }
 
 }
