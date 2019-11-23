@@ -3,6 +3,7 @@ package ca.qc.bdeb.info203.SSTemp.entity.playerParts;
 import ca.qc.bdeb.info203.SSTemp.res.PlayerPart;
 import ca.qc.bdeb.info203.SSTemp.entity.Player;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
@@ -67,11 +68,12 @@ public class CoreLaser extends PlayerPart {
     @Override
     public void dessiner(Graphics g) {
         if (!shootingAnimation.isStopped()) {
-            g.drawAnimation(shootingAnimation, getX(), getY());
+            g.drawAnimation(shootingAnimation, getX(), getY(), new Color(166, 200, 252));
+
         } else if (!reverseTransition.isStopped()) {
-            g.drawAnimation(reverseTransition, getX(), getY());
+            g.drawAnimation(reverseTransition, getX(), getY(), new Color(166, 200, 252));
         } else {
-            g.drawImage(idleImage, getX(), getY());
+            g.drawImage(idleImage, getX(), getY(), new Color(166, 200, 252));
         }
     }
 }

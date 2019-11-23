@@ -55,11 +55,11 @@ public class Jeu extends BasicGame {
     private SpriteSheet playerLeftPropulsorSpriteSheet;
 
     private SpriteSheet asteroidSpriteSheet;
-    
+
     private SpriteSheet starSpriteSheet;
 
     private String bulletImagePath;
-    
+
     private String planetChunkImagePath;
 
     private Player player;
@@ -71,11 +71,11 @@ public class Jeu extends BasicGame {
     }
 
     public void init(GameContainer container) throws SlickException {
-        this.container = container; 
+        this.container = container;
         loadSprites();
-        
+
         entites.add(new Background(0, 0, largeurEcran, hauteurEcran, 0, planetChunkImagePath, playerBodySpriteSheet));
-        
+
         player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath);
         entites.add(player);
         mobiles.add(player);
@@ -105,7 +105,6 @@ public class Jeu extends BasicGame {
                         if (entite.getRectangle().intersects(entite2.getRectangle())) {
                             entite2.setDetruire(true);
                             entite.setDetruire(true);
-                            System.out.println("Delete");
                         }
                     }
                 }
@@ -169,13 +168,13 @@ public class Jeu extends BasicGame {
     private void loadSprites() {
         try {
             playerBodySpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerBodySpriteSheet.png", 123, 76);
-            playerCoreLaserSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreLaserSpriteSheet.png", 71, 16);
-            playerCoreEffectSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreEffectSpriteSheet.png", 19, 30);
+            playerCoreLaserSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreLaserSpriteSheet2.png", 71, 16);
+            playerCoreEffectSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerCoreEffectSpriteSheet2.png", 19, 30);
             playerRightPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerRightPropulsorSpriteSheet.png", 56, 34);
             playerLeftPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerLeftPropulsorSpriteSheet.png", 56, 34);
             asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheet.png", 16, 16);
             starSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/StarSpriteSheet.png", 2, 2);
-            bulletImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Bullet.png";
+            bulletImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Bullet2.png";
             planetChunkImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/BackgroundChunk.png";
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);

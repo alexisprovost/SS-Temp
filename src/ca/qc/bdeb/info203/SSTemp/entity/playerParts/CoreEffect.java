@@ -2,7 +2,9 @@ package ca.qc.bdeb.info203.SSTemp.entity.playerParts;
 
 import ca.qc.bdeb.info203.SSTemp.res.PlayerPart;
 import ca.qc.bdeb.info203.SSTemp.entity.Player;
+import javax.swing.JRootPane;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -40,7 +42,7 @@ public class CoreEffect extends PlayerPart {
 
     @Override
     public void dessiner(Graphics g) {
-        g.drawAnimation(idleAnimation, getX(), getY());
+        g.drawAnimation(idleAnimation, getX(), getY(), new Color(166, 200, 252));
     }
 
 }
