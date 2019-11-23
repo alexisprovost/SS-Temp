@@ -1,7 +1,5 @@
 package ca.qc.bdeb.info203.SSTemp;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
@@ -24,7 +22,7 @@ public class Main {
         try {
             AppGameContainer app = new AppGameContainer(new Jeu(1920, 1080));
             app.setDisplayMode(1920, 1080, true);
-            app.setShowFPS(false);
+            app.setShowFPS(true);
             app.setVSync(true);
             app.start();
         } catch (SlickException e) {

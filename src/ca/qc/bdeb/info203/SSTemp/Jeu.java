@@ -3,6 +3,7 @@ package ca.qc.bdeb.info203.SSTemp;
 import ca.qc.bdeb.info203.SSTemp.entity.Asteroid;
 import ca.qc.bdeb.info203.SSTemp.entity.Background;
 import ca.qc.bdeb.info203.SSTemp.entity.Bullet;
+import ca.qc.bdeb.info203.SSTemp.entity.Mars;
 import ca.qc.bdeb.info203.SSTemp.entity.Player;
 import ca.qc.bdeb.info203.SSTemp.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.res.Mobile;
@@ -64,6 +65,8 @@ public class Jeu extends BasicGame {
 
     private Player player;
 
+    private Mars mars;
+
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
         this.largeurEcran = largeur;
@@ -74,7 +77,9 @@ public class Jeu extends BasicGame {
         this.container = container;
         loadSprites();
 
-        entites.add(new Background(0, 0, largeurEcran, hauteurEcran, 0, planetChunkImagePath, playerBodySpriteSheet));
+        Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, starSpriteSheet);
+        entites.add(b);
+        mobiles.add(b);
 
         player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath);
         entites.add(player);
@@ -162,6 +167,8 @@ public class Jeu extends BasicGame {
             case Input.KEY_SPACE:
                 player.shootBullet(false);
                 break;
+            case Input.KEY_E:
+
         }
     }
 

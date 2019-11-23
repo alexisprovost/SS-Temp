@@ -40,6 +40,13 @@ public abstract class Entity {
     private boolean detruire = false;
 
     /**
+     * Constructeur d'Entite sans parametres
+     *
+     */
+    public Entity() {
+    }
+
+    /**
      * Constructeur d'Entite avec image sur le disque
      *
      * @param x position de l'entité dans l'écran - x
