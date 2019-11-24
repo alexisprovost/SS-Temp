@@ -1,12 +1,7 @@
 package ca.qc.bdeb.info203.SSTemp;
 
-import ca.qc.bdeb.info203.SSTemp.entity.Asteroid;
-import ca.qc.bdeb.info203.SSTemp.entity.Background;
-import ca.qc.bdeb.info203.SSTemp.entity.Bullet;
-import ca.qc.bdeb.info203.SSTemp.entity.Mars;
-import ca.qc.bdeb.info203.SSTemp.entity.Player;
-import ca.qc.bdeb.info203.SSTemp.res.Entity;
-import ca.qc.bdeb.info203.SSTemp.res.Mobile;
+import ca.qc.bdeb.info203.SSTemp.entity.*;
+import ca.qc.bdeb.info203.SSTemp.res.*;
 import java.util.ArrayList;
 import java.util.Random;
 import org.newdawn.slick.BasicGame;
@@ -59,13 +54,19 @@ public class Jeu extends BasicGame {
 
     private SpriteSheet starSpriteSheet;
 
+    private SpriteSheet parachuteSpriteSheet;
+
     private String bulletImagePath;
 
     private String planetChunkImagePath;
 
+    private String marsImagePath;
+
     private Player player;
 
-    private Mars mars;
+    private ControllerMars controllerMars;
+
+    private Parachute parachute;
 
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
@@ -77,45 +78,33 @@ public class Jeu extends BasicGame {
         this.container = container;
         loadSprites();
 
-        Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, starSpriteSheet);
+        controllerMars = new ControllerMars();
+
+        Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, marsImagePath, starSpriteSheet, controllerMars);
         entites.add(b);
         mobiles.add(b);
 
-        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath);
+        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath, controllerMars);
         entites.add(player);
         mobiles.add(player);
 
         for (int i = 0; i < 20; i++) {
             Random rnd = new Random();
-            Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64);
+            Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars);
             entites.add(asteroid);
             mobiles.add(asteroid);
         }
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
+        spawnParachute();
+
         for (Mobile mobile : mobiles) {
             mobile.bouger(largeurEcran, hauteurEcran);
         }
-        Bullet newBullet = player.shoot();
-        if (newBullet != null) {
-            entites.add(newBullet);
-            mobiles.add(newBullet);
-        }
 
-        for (Entity entite : entites) {
-            if (entite instanceof Bullet) {
-                for (Entity entite2 : entites) {
-                    if (entite2 instanceof Asteroid) {
-                        if (entite.getRectangle().intersects(entite2.getRectangle())) {
-                            entite2.setDetruire(true);
-                            entite.setDetruire(true);
-                        }
-                    }
-                }
-            }
-        }
-
+        spawnBullet();
+        manageCollisons();
         detruireEntites();
     }
 
@@ -127,48 +116,53 @@ public class Jeu extends BasicGame {
 
     @Override
     public void keyPressed(int key, char c) {
-        switch (key) {
-            case Input.KEY_W:
-                player.moveUp(true);
-                break;
-            case Input.KEY_S:
-                player.moveDown(true);
-                break;
-            case Input.KEY_A:
-                player.moveLeft(true);
-                break;
-            case Input.KEY_D:
-                player.moveRight(true);
-                break;
-            case Input.KEY_SPACE:
-                player.shootBullet(true);
-                break;
+        if (!controllerMars.isGamePaused()) {
+            switch (key) {
+                case Input.KEY_W:
+                    player.moveUp(true);
+                    break;
+                case Input.KEY_S:
+                    player.moveDown(true);
+                    break;
+                case Input.KEY_A:
+                    player.moveLeft(true);
+                    break;
+                case Input.KEY_D:
+                    player.moveRight(true);
+                    break;
+                case Input.KEY_SPACE:
+                    player.shootBullet(true);
+                    break;
+            }
         }
     }
 
     @Override
     public void keyReleased(int key, char c) {
-        switch (key) {
-            case Input.KEY_ESCAPE:
-                container.exit();
-                break;
-            case Input.KEY_W:
-                player.moveUp(false);
-                break;
-            case Input.KEY_S:
-                player.moveDown(false);
-                break;
-            case Input.KEY_A:
-                player.moveLeft(false);
-                break;
-            case Input.KEY_D:
-                player.moveRight(false);
-                break;
-            case Input.KEY_SPACE:
-                player.shootBullet(false);
-                break;
-            case Input.KEY_E:
-
+        if (key == Input.KEY_ESCAPE) {
+            container.exit();
+        }
+        if (!controllerMars.isGamePaused()) {
+            switch (key) {
+                case Input.KEY_W:
+                    player.moveUp(false);
+                    break;
+                case Input.KEY_S:
+                    player.moveDown(false);
+                    break;
+                case Input.KEY_A:
+                    player.moveLeft(false);
+                    break;
+                case Input.KEY_D:
+                    player.moveRight(false);
+                    break;
+                case Input.KEY_SPACE:
+                    player.shootBullet(false);
+                    break;
+                case Input.KEY_E:
+                    goToMars();
+                    break;
+            }
         }
     }
 
@@ -181,8 +175,10 @@ public class Jeu extends BasicGame {
             playerLeftPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerLeftPropulsorSpriteSheet.png", 56, 34);
             asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheet.png", 16, 16);
             starSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/StarSpriteSheet.png", 2, 2);
+            parachuteSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/Parachute.png", 31, 50);
             bulletImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Bullet2.png";
             planetChunkImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/BackgroundChunk.png";
+            marsImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Mars.png";
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);
             System.exit(1);
@@ -200,11 +196,57 @@ public class Jeu extends BasicGame {
         for (Entity entite : aDetruire) {
             if (entite instanceof Asteroid) {
                 Random rnd = new Random();
-                Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64);
+                Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars);
                 entites.add(asteroid);
                 mobiles.add(asteroid);
             }
         }
         aDetruire.clear();
+    }
+
+    private void spawnBullet() {
+        Bullet newBullet = player.shoot();
+        if (newBullet != null) {
+            entites.add(newBullet);
+            mobiles.add(newBullet);
+        }
+    }
+
+    private void spawnParachute() {
+        if (controllerMars.isSpawnParachute()) {
+            this.parachute = new Parachute(player.getX() + 23, player.getY() + 23, parachuteSpriteSheet);
+            entites.add(parachute);
+            mobiles.add(parachute);
+            controllerMars.setSpawnParachute(false);
+        }
+        if (controllerMars.isRemoveParachute()) {
+            parachute.setDetruire(true);
+            controllerMars.setRemoveParachute(false);
+        }
+    }
+
+    private void manageCollisons() {
+        for (Entity entite : entites) {
+            if (entite instanceof Bullet) {
+                for (Entity entite2 : entites) {
+                    if (entite2 instanceof Asteroid) {
+                        if (entite.getRectangle().intersects(entite2.getRectangle())) {
+                            entite2.setDetruire(true);
+                            entite.setDetruire(true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void goToMars() {
+        player.moveDown(false);
+        player.moveLeft(false);
+        player.moveUp(false);
+        player.moveRight(true);
+        controllerMars.setPauseGame(true);
+        controllerMars.setGoingToMars(true);
+        controllerMars.setInitialCoordinates(player.getX(), player.getY());
     }
 }

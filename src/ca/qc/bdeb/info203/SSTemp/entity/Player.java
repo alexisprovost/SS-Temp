@@ -14,30 +14,32 @@ import org.newdawn.slick.SpriteSheet;
  * @author Manuel Ramirez, Alexis Provost
  */
 public class Player extends Entity implements Mobile {
-
+    
     private final int MAX_SPEED = 8;
     private final int ACCELERATION = 1;
-
+    
     private Body body;
     private CoreEffect coreEffect;
     private CoreLaser coreLaser;
     private Propulsor rightPropulsor;
     private Propulsor leftPropulsor;
-
+    
+    private ControllerMars controllerMars;
+    
     private boolean moveUp;
     private boolean moveDown;
     private boolean moveLeft;
     private boolean moveRight;
     private boolean shootBullet;
-
+    
     private boolean bulletPending;
-
+    
     private String bulletImagePath;
-
+    
     private int speedX = 0;
     private int speedY = 0;
-
-    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, String bulletImagePath) {
+    
+    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, String bulletImagePath, ControllerMars controllerMars) {
         super(x, y, 128, 96);
         this.body = new Body(this, bodySpriteSheet, 22, 10);
         this.coreEffect = new CoreEffect(this, coreEffectSpriteSheet, 52, 33);
@@ -45,8 +47,9 @@ public class Player extends Entity implements Mobile {
         this.rightPropulsor = new Propulsor(this, rightPropulsorSpriteSheet, -20, 62);
         this.leftPropulsor = new Propulsor(this, leftPropulsorSpriteSheet, -20, 0);
         this.bulletImagePath = bulletImagePath;
+        this.controllerMars = controllerMars;
     }
-
+    
     @Override
     public void dessiner(Graphics g) {
         body.dessiner(g);
@@ -55,17 +58,14 @@ public class Player extends Entity implements Mobile {
         rightPropulsor.dessiner(g);
         leftPropulsor.dessiner(g);
     }
-
+    
     @Override
     public void bouger(int limiteX, int limiteY) {
         setSpeed();
-        boolean verificationX = getX() + speedX + getWidth() <= limiteX && getX() + speedX >= 0;
-        boolean verificationY = getY() + speedY + getHeight() <= limiteY && getY() + speedY >= 0;
-        if (verificationX) {
-            setLocation(getX() + speedX, getY());
-        }
-        if (verificationY) {
-            setLocation(getX(), getY() + speedY);
+        if (controllerMars.isGamePaused()) {
+            deplacementMars(limiteX, limiteY);
+        } else {
+            deplacementNormal(limiteX, limiteY);
         }
         boolean moving = moveUp || moveDown || moveLeft || moveRight;
         rightPropulsor.verifyPropulsorState(moving);
@@ -73,7 +73,7 @@ public class Player extends Entity implements Mobile {
         leftPropulsor.verifyPropulsorState(moving);
         leftPropulsor.setPropulsorRotation(speedX, speedY);
     }
-
+    
     private void setSpeed() {
         if (moveUp && speedY > -MAX_SPEED) {
             speedY -= ACCELERATION;
@@ -96,7 +96,7 @@ public class Player extends Entity implements Mobile {
             speedX -= ACCELERATION;
         }
     }
-
+    
     public Bullet shoot() {
         Bullet bullet = null;
         if (!coreLaser.isShooting() && bulletPending) {
@@ -110,23 +110,60 @@ public class Player extends Entity implements Mobile {
         }
         return bullet;
     }
-
+    
+    private void deplacementNormal(int limiteX, int limiteY) {
+        boolean verificationX = getX() + speedX + getWidth() <= limiteX && getX() + speedX >= 0;
+        boolean verificationY = getY() + speedY + getHeight() <= limiteY && getY() + speedY >= 0;
+        if (verificationX) {
+            setLocation(getX() + speedX, getY());
+        }
+        if (verificationY) {
+            setLocation(getX(), getY() + speedY);
+        }
+    }
+    
+    private void deplacementMars(int limiteX, int limiteY) {
+        setLocation(getX() + speedX, getY());
+        if (controllerMars.isGoingToMars()) {
+            if (getX() > limiteX + 500) {
+                setLocation(-(getWidth() + 500), (limiteY - getHeight()) / 2);
+                controllerMars.setGoingToMars(false);
+                controllerMars.setOnMars(true);
+            }
+        } else if (controllerMars.isOnMars()) {
+            if (controllerMars.isLeavingMars()) {
+                if (getX() > limiteX + 500) {
+                    setLocation(-500, controllerMars.getInitialY());
+                    controllerMars.setOnMars(false);
+                    controllerMars.setRemoveParachute(true);
+                    controllerMars.setLeaveMars(false);
+                }
+            } else if (getX() > (limiteX - getWidth()) / 2) {
+                controllerMars.setSpawnParachute(true);
+                controllerMars.setLeaveMars(true);
+            }
+        } else if (getX() > controllerMars.getInitialX()) {
+            controllerMars.setGamePaused(false);
+            moveRight(false);
+        }
+    }
+    
     public void moveUp(boolean moveUp) {
         this.moveUp = moveUp;
     }
-
+    
     public void moveDown(boolean moveDown) {
         this.moveDown = moveDown;
     }
-
+    
     public void moveLeft(boolean moveLeft) {
         this.moveLeft = moveLeft;
     }
-
+    
     public void moveRight(boolean moveRight) {
         this.moveRight = moveRight;
     }
-
+    
     public void shootBullet(boolean shootBullet) {
         this.shootBullet = shootBullet;
     }

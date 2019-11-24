@@ -22,7 +22,7 @@ public class Main {
         try {
             AppGameContainer app = new AppGameContainer(new Jeu(1920, 1080));
             app.setDisplayMode(1920, 1080, true);
-            app.setShowFPS(true);
+            app.setShowFPS(false);
             app.setVSync(true);
             app.start();
         } catch (SlickException e) {
