@@ -31,6 +31,8 @@ public class Jeu extends BasicGame {
     private ArrayList<Entity> entites = new ArrayList<>();
 
     private ArrayList<Entity> aDetruire = new ArrayList<>();
+    
+    private ArrayList<Entity> aSplit = new ArrayList<>();
     /**
      * Largeur de l'écran.
      */
@@ -88,9 +90,13 @@ public class Jeu extends BasicGame {
         entites.add(player);
         mobiles.add(player);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 50; i++) {
             Random rnd = new Random();
-            Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars);
+            Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 0, 256, 256, controllerMars, hauteurEcran, largeurEcran);
+            //Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 256, 128, 128, controllerMars, hauteurEcran, largeurEcran);
+            //Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars, hauteurEcran, largeurEcran);
+            //Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 320, 32, 32, controllerMars, hauteurEcran, largeurEcran);
+            //Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 352, 16, 16, controllerMars, hauteurEcran, largeurEcran);
             entites.add(asteroid);
             mobiles.add(asteroid);
         }
@@ -112,6 +118,12 @@ public class Jeu extends BasicGame {
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
+        if(player.getHealth() <= 0){
+            g.drawString("Dead", 10, 10);
+        }else{
+            g.drawString(player.getHealth()+"", 10, 10);
+        }
+        
     }
 
     @Override
@@ -185,23 +197,76 @@ public class Jeu extends BasicGame {
         }
     }
 
+    //Séparer chaque entité
     private void detruireEntites() {
         for (Entity entite : entites) {
             if (entite.getDetruire()) {
                 aDetruire.add(entite);
+            }
+            if (entite.getSplit()) {
+                aSplit.add(entite);
             }
         }
         entites.removeAll(aDetruire);
         mobiles.removeAll(aDetruire);
         for (Entity entite : aDetruire) {
             if (entite instanceof Asteroid) {
-                Random rnd = new Random();
-                Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars);
-                entites.add(asteroid);
-                mobiles.add(asteroid);
+                
             }
         }
         aDetruire.clear();
+        
+        entites.removeAll(aSplit);
+        mobiles.removeAll(aSplit);
+        for (Entity entite : aSplit) {
+            if (entite instanceof Asteroid) {
+                Random rnd = new Random();
+                int lastSize = entite.getWidth();
+                int lastPosX = entite.getX();
+                int lastPosY = entite.getY();
+                Asteroid asteroid1 = null;
+                Asteroid asteroid2 = null;
+
+                switch (lastSize) {
+                    case 256:
+                        asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 0, 256, 128, 128, controllerMars, hauteurEcran, largeurEcran);
+                        asteroid2 = new Asteroid(lastPosX - 20, lastPosY - rnd.nextInt(lastSize), asteroidSpriteSheet, 0, 256, 128, 128, controllerMars, hauteurEcran, largeurEcran);
+                        splitAsteroid(asteroid1, asteroid2);
+                        break;
+                    case 128:
+                        asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars, hauteurEcran, largeurEcran);
+                        asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars, hauteurEcran, largeurEcran);
+                        splitAsteroid(asteroid1, asteroid2);
+                        break;
+                    case 64:
+                        asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 320, 32, 32, controllerMars, hauteurEcran, largeurEcran);
+                        asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 320, 32, 32, controllerMars, hauteurEcran, largeurEcran);
+                        splitAsteroid(asteroid1, asteroid2);
+                        break;
+                    case 32:
+                        asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 352, 16, 16, controllerMars, hauteurEcran, largeurEcran);
+                        asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 352, 16, 16, controllerMars, hauteurEcran, largeurEcran);
+                        splitAsteroid(asteroid1, asteroid2);
+                        break;
+                    case 16:
+                        //Capture part
+                        break;
+                    default:
+                        System.out.println("Size not valid error");
+                        ;
+                }
+            }
+        }
+        aSplit.clear();
+    }
+    
+    
+
+    private void splitAsteroid(Asteroid asteroid1, Asteroid asteroid2) {
+        entites.add(asteroid1);
+        mobiles.add(asteroid1);
+        entites.add(asteroid2);
+        mobiles.add(asteroid2);
     }
 
     private void spawnBullet() {
@@ -228,11 +293,34 @@ public class Jeu extends BasicGame {
     private void manageCollisons() {
         for (Entity entite : entites) {
             if (entite instanceof Bullet) {
-                for (Entity entite2 : entites) {
-                    if (entite2 instanceof Asteroid) {
-                        if (entite.getRectangle().intersects(entite2.getRectangle())) {
-                            entite2.setDetruire(true);
+                for (Entity asteroid : entites) {
+                    if (asteroid instanceof Asteroid) {
+                        if (entite.getRectangle().intersects(asteroid.getRectangle())) {
+                            asteroid.setSplit(true);
                             entite.setDetruire(true);
+                        }
+                    }
+                }
+            }
+            if (entite instanceof Player) {
+                for (Entity asteroid : entites) {
+                    if (asteroid instanceof Asteroid) {
+                        if (player.getRectangle().intersects(asteroid.getRectangle())) {
+                            player.setHealth(player.getHealth()-1);
+                            asteroid.setDetruire(true);
+                        }
+                    }
+                }
+            }
+            
+            if (entite instanceof Asteroid) {
+                for (Entity asteroid : entites) {
+                    if (asteroid instanceof Asteroid) {
+                        if (entite.getRectangle().intersects(asteroid.getRectangle())) {
+                            /*((Asteroid) entite).setxSpeed(((Asteroid) entite).getxSpeed()*-1);
+                            ((Asteroid) entite).setySpeed(((Asteroid) entite).getySpeed()*-1);
+                            ((Asteroid) asteroid).setxSpeed(((Asteroid) asteroid).getxSpeed()*-1);
+                            ((Asteroid) asteroid).setySpeed(((Asteroid) asteroid).getySpeed()*-1);*/
                         }
                     }
                 }

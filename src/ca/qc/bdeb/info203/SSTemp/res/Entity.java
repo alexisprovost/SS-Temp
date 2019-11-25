@@ -39,6 +39,8 @@ public abstract class Entity {
      */
     private boolean detruire = false;
 
+    private boolean split = false;
+
     /**
      * Constructeur d'Entite sans parametres
      *
@@ -170,4 +172,12 @@ public abstract class Entity {
      * l'application.
      */
     public abstract void dessiner(Graphics g);
+
+    public void setSplit(boolean split){
+        this.split = split;
+    }
+    
+    public boolean getSplit(){
+        return split;
+    }
 }

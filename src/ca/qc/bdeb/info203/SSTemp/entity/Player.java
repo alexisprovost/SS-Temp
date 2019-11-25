@@ -39,6 +39,8 @@ public class Player extends Entity implements Mobile {
     private int speedX = 0;
     private int speedY = 0;
     
+    private int health = 20;
+    
     public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, String bulletImagePath, ControllerMars controllerMars) {
         super(x, y, 128, 96);
         this.body = new Body(this, bodySpriteSheet, 22, 10);
@@ -167,4 +169,13 @@ public class Player extends Entity implements Mobile {
     public void shootBullet(boolean shootBullet) {
         this.shootBullet = shootBullet;
     }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+   
 }
