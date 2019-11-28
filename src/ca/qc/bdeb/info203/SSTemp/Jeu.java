@@ -9,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 
 /**
@@ -31,7 +32,7 @@ public class Jeu extends BasicGame {
     private ArrayList<Entity> entites = new ArrayList<>();
 
     private ArrayList<Entity> aDetruire = new ArrayList<>();
-    
+
     private ArrayList<Entity> aSplit = new ArrayList<>();
     /**
      * Largeur de l'écran.
@@ -70,6 +71,10 @@ public class Jeu extends BasicGame {
 
     private Parachute parachute;
 
+    private Sound sound;
+
+    private boolean musicPaused;
+
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
         this.largeurEcran = largeur;
@@ -90,7 +95,11 @@ public class Jeu extends BasicGame {
         entites.add(player);
         mobiles.add(player);
 
-        for (int i = 0; i < 50; i++) {
+        //Setup Music
+        //Maktone - Razor1911 Chipdisk 02
+        startMusic();
+
+        for (int i = 0; i < 20; i++) {
             Random rnd = new Random();
             Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 0, 256, 256, controllerMars, hauteurEcran, largeurEcran);
             //Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 256, 128, 128, controllerMars, hauteurEcran, largeurEcran);
@@ -118,12 +127,12 @@ public class Jeu extends BasicGame {
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
-        if(player.getHealth() <= 0){
+        if (player.getHealth() <= 0) {
             g.drawString("Dead", 10, 10);
-        }else{
-            g.drawString(player.getHealth()+"", 10, 10);
+        } else {
+            g.drawString(player.getHealth() + "", 10, 10);
         }
-        
+
     }
 
     @Override
@@ -153,6 +162,8 @@ public class Jeu extends BasicGame {
     public void keyReleased(int key, char c) {
         if (key == Input.KEY_ESCAPE) {
             container.exit();
+        } else if (key == Input.KEY_M) {
+            pauseMusic();
         }
         if (!controllerMars.isGamePaused()) {
             switch (key) {
@@ -211,11 +222,11 @@ public class Jeu extends BasicGame {
         mobiles.removeAll(aDetruire);
         for (Entity entite : aDetruire) {
             if (entite instanceof Asteroid) {
-                
+
             }
         }
         aDetruire.clear();
-        
+
         entites.removeAll(aSplit);
         mobiles.removeAll(aSplit);
         for (Entity entite : aSplit) {
@@ -259,8 +270,27 @@ public class Jeu extends BasicGame {
         }
         aSplit.clear();
     }
-    
-    
+
+    private void startMusic() {
+        try {
+            sound = new Sound("ca/qc/bdeb/info203/SSTemp/sounds/background.ogg");
+            sound.loop();
+            musicPaused = false;
+        } catch (SlickException e) {
+            System.out.println("File not found or Library Missing");
+        }
+    }
+
+    private void pauseMusic() {
+        if (musicPaused) {
+            sound.loop();
+            musicPaused = false;
+        } else {
+            sound.stop();
+            musicPaused = true;
+        }
+
+    }
 
     private void splitAsteroid(Asteroid asteroid1, Asteroid asteroid2) {
         entites.add(asteroid1);
@@ -306,13 +336,13 @@ public class Jeu extends BasicGame {
                 for (Entity asteroid : entites) {
                     if (asteroid instanceof Asteroid) {
                         if (player.getRectangle().intersects(asteroid.getRectangle())) {
-                            player.setHealth(player.getHealth()-1);
+                            player.setHealth(player.getHealth() - 1);
                             asteroid.setDetruire(true);
                         }
                     }
                 }
             }
-            
+
             if (entite instanceof Asteroid) {
                 for (Entity asteroid : entites) {
                     if (asteroid instanceof Asteroid) {
@@ -333,6 +363,7 @@ public class Jeu extends BasicGame {
         player.moveLeft(false);
         player.moveUp(false);
         player.moveRight(true);
+        player.shootBullet(false);
         controllerMars.setPauseGame(true);
         controllerMars.setGoingToMars(true);
         controllerMars.setInitialCoordinates(player.getX(), player.getY());
