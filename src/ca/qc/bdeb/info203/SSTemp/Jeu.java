@@ -129,6 +129,7 @@ public class Jeu extends BasicGame {
         }
         if (player.getHealth() <= 0) {
             g.drawString("Dead", 10, 10);
+            
         } else {
             g.drawString(player.getHealth() + "", 10, 10);
         }
