@@ -199,10 +199,10 @@ public class Jeu extends BasicGame {
             playerLeftPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerLeftPropulsorSpriteSheet.png", 56, 34);
             asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheet.png", 16, 16);
             starSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/StarSpriteSheet.png", 2, 2);
-            parachuteSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/Parachute.png", 31, 50);
+            parachuteSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/ParachuteSpriteSheet.png", 31, 50);
             bulletImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Bullet2.png";
             planetChunkImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/BackgroundChunk.png";
-            marsImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Mars.png";
+            marsImagePath = "sprites/Mars.png";
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);
             System.exit(1);
