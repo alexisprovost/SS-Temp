@@ -36,6 +36,13 @@ public class Modele {
                 System.out.println("Invalid Asteroid Size");
                 break;
         }
+        if (health < 0) {
+            health = 0;
+        }
+    }
+
+    public int getMaxHealth() {
+        return MAX_HEALTH;
     }
 
     public int getHealth() {

@@ -17,12 +17,10 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
 
     private int xSpeed;
     private int ySpeed;
-    private int maxSpeed = 5;
+    private int maxSpeed = 6;
     private int extraSpace = 500;
     private int hauteurEcran = 0;
     private int largeurEcran = 0;
-
-    private Image asteroidImg = null;
 
     public Asteroid(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne, int width, int height, MarsState controllerMars, int hauteurEcran, int largeurEcran) {
         super(x, y, spriteSheet, ligne, colonne, width, height);
@@ -37,10 +35,15 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
     private void chooseRandomSpeed(Random rnd) {
         xSpeed = -rnd.nextInt(maxSpeed);
 
-        if (rnd.nextInt(2) == 1) {
-            ySpeed = -rnd.nextInt(maxSpeed);
-        } else {
-            ySpeed = rnd.nextInt(maxSpeed);
+        switch (rnd.nextInt(3)) {
+            case 1:
+                ySpeed = -rnd.nextInt(maxSpeed);
+                break;
+            case 2:
+                ySpeed = rnd.nextInt(maxSpeed);
+                break;
+            case 3:
+                ySpeed = 0;
         }
     }
 
@@ -48,19 +51,19 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
         int randomSprite = rnd.nextInt(4);
         switch (getWidth()) {
             case 256:
-                asteroidImg = spriteSheet.getSubImage(256 * randomSprite, 0, getWidth(), getHeight());
+                setImage(spriteSheet.getSubImage(256 * randomSprite, 0, getWidth(), getHeight()));
                 break;
             case 128:
-                asteroidImg = spriteSheet.getSubImage(128 * randomSprite, 256, getWidth(), getHeight());
+                setImage(spriteSheet.getSubImage(128 * randomSprite, 256, getWidth(), getHeight()));
                 break;
             case 64:
-                asteroidImg = spriteSheet.getSubImage(64 * randomSprite + 512, 256, getWidth(), getHeight());
+                setImage(spriteSheet.getSubImage(64 * randomSprite + 512, 256, getWidth(), getHeight()));
                 break;
             case 32:
-                asteroidImg = spriteSheet.getSubImage(32 * randomSprite + 512, 320, getWidth(), getHeight());
+                setImage(spriteSheet.getSubImage(32 * randomSprite + 512, 320, getWidth(), getHeight()));
                 break;
             case 16:
-                asteroidImg = spriteSheet.getSubImage(16 * randomSprite + 512, 352, getWidth(), getHeight());
+                setImage(spriteSheet.getSubImage(16 * randomSprite + 512, 352, getWidth(), getHeight()));
                 break;
             default:
                 System.out.println("Invalid Asteroid Size");
@@ -71,7 +74,7 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
     @Override
     public void dessiner(Graphics g) {
         if (!controllerMars.isOnMars()) {
-            g.drawImage(asteroidImg, getX(), getY());
+            g.drawImage(getImage(), getX(), getY());
             //g.drawRect(getX(),getY(),getWidth(),getHeight());
             //g.setColor(Color.blue);
         }
@@ -127,7 +130,6 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
         }
 
         getImage().setRotation(getImage().getRotation() + 1);
-
         setLocation(getX() + xSpeed, getY() + ySpeed);
     }
 }

@@ -4,6 +4,7 @@ import ca.qc.bdeb.info203.SSTemp.model.Modele;
 import ca.qc.bdeb.info203.SSTemp.vue.entity.*;
 import ca.qc.bdeb.info203.SSTemp.vue.res.*;
 import ca.qc.bdeb.info203.SSTemp.vue.entity.Bullet;
+import ca.qc.bdeb.info203.SSTemp.vue.ui.HealthBar;
 import java.util.ArrayList;
 import java.util.Random;
 import org.newdawn.slick.BasicGame;
@@ -33,9 +34,13 @@ public class Jeu extends BasicGame {
      */
     private ArrayList<Entity> entites = new ArrayList<>();
     /**
-     * Toutes les entités.
+     * Tous les collisionables.
      */
     private ArrayList<Collisionable> collisionables = new ArrayList<>();
+    /**
+     * Tous les éléments UI.
+     */
+    private ArrayList<Entity> ui = new ArrayList<>();
     /**
      * Largeur de l'écran.
      */
@@ -67,6 +72,10 @@ public class Jeu extends BasicGame {
 
     private String marsImagePath;
 
+    private String barImagePath;
+
+    private String heartImagePath;
+
     private Player player;
 
     private MarsState controllerMars;
@@ -91,6 +100,9 @@ public class Jeu extends BasicGame {
 
         controllerMars = new MarsState();
         modele = new Modele();
+
+        HealthBar h = new HealthBar(10, 10, barImagePath, heartImagePath, modele);
+        ui.add(h);
 
         Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, marsImagePath, starSpriteSheet, controllerMars);
         entites.add(b);
@@ -132,11 +144,8 @@ public class Jeu extends BasicGame {
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
-        if (modele.getHealth() <= 0) {
-            g.drawString("Dead", 10, 10);
-
-        } else {
-            g.drawString(modele.getHealth() + "", 10, 10);
+        for (Entity uiEntity : ui) {
+            uiEntity.dessiner(g);
         }
     }
 
@@ -207,6 +216,8 @@ public class Jeu extends BasicGame {
             bulletImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Bullet2.png";
             planetChunkImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/BackgroundChunk.png";
             marsImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Mars.png";
+            barImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Bar.png";
+            heartImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Heart.png";
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);
             System.exit(1);
