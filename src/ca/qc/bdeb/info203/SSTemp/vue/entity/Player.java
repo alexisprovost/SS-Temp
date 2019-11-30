@@ -1,5 +1,6 @@
 package ca.qc.bdeb.info203.SSTemp.vue.entity;
 
+import ca.qc.bdeb.info203.SSTemp.vue.CoreColorPicker;
 import ca.qc.bdeb.info203.SSTemp.vue.MarsState;
 import ca.qc.bdeb.info203.SSTemp.vue.entity.playerParts.*;
 import ca.qc.bdeb.info203.SSTemp.vue.res.Collisionable;
@@ -24,6 +25,7 @@ public class Player extends Entity implements Mobile, Collisionable {
     private Propulsor leftPropulsor;
 
     private MarsState controllerMars;
+    private CoreColorPicker coreColorPicker;
 
     private boolean moveUp;
     private boolean moveDown;
@@ -38,15 +40,16 @@ public class Player extends Entity implements Mobile, Collisionable {
     private int speedX = 0;
     private int speedY = 0;
 
-    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, String bulletImagePath, MarsState controllerMars) {
+    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, String bulletImagePath, MarsState controllerMars, CoreColorPicker coreColorPicker) {
         super(x, y, 128, 96);
         this.body = new Body(this, bodySpriteSheet, 22, 10);
-        this.coreEffect = new CoreEffect(this, coreEffectSpriteSheet, 52, 33);
-        this.coreLaser = new CoreLaser(this, coreLaserSpriteSheet, 57, 40);
+        this.coreEffect = new CoreEffect(this, coreEffectSpriteSheet, 52, 33, coreColorPicker);
+        this.coreLaser = new CoreLaser(this, coreLaserSpriteSheet, 57, 40, coreColorPicker);
         this.rightPropulsor = new Propulsor(this, rightPropulsorSpriteSheet, -20, 62);
         this.leftPropulsor = new Propulsor(this, leftPropulsorSpriteSheet, -20, 0);
         this.bulletImagePath = bulletImagePath;
         this.controllerMars = controllerMars;
+        this.coreColorPicker = coreColorPicker;
     }
 
     @Override
@@ -100,7 +103,7 @@ public class Player extends Entity implements Mobile, Collisionable {
         Bullet bullet = null;
         if (!coreLaser.isShooting() && bulletPending) {
             bulletPending = false;
-            bullet = new Bullet(getX(), getY(), bulletImagePath);
+            bullet = new Bullet(getX(), getY(), bulletImagePath, coreColorPicker);
             coreLaser.startTransition();
         }
         if (coreLaser.isIdle() && shootBullet) {
@@ -145,6 +148,10 @@ public class Player extends Entity implements Mobile, Collisionable {
             controllerMars.setGamePaused(false);
             moveRight(false);
         }
+    }
+
+    public void collectAsteroid() {
+        body.startAnimation();
     }
 
     public void moveUp(boolean moveUp) {

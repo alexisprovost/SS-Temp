@@ -1,5 +1,6 @@
 package ca.qc.bdeb.info203.SSTemp.vue.entity.playerParts;
 
+import ca.qc.bdeb.info203.SSTemp.vue.CoreColorPicker;
 import ca.qc.bdeb.info203.SSTemp.vue.res.PlayerPart;
 import ca.qc.bdeb.info203.SSTemp.vue.entity.Player;
 import javax.swing.JRootPane;
@@ -17,9 +18,11 @@ import org.newdawn.slick.SpriteSheet;
 public class CoreEffect extends PlayerPart {
 
     private Animation idleAnimation;
+    private CoreColorPicker coreColorPicker;
 
-    public CoreEffect(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset) {
+    public CoreEffect(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset, CoreColorPicker coreColorPicker) {
         super(player, spriteSheet, xOffset, yOffset);
+        this.coreColorPicker = coreColorPicker;
         initIdleAnimation();
     }
 
@@ -42,7 +45,7 @@ public class CoreEffect extends PlayerPart {
 
     @Override
     public void dessiner(Graphics g) {
-        g.drawAnimation(idleAnimation, getX(), getY(), new Color(166, 200, 252));
+        g.drawAnimation(idleAnimation, getX(), getY(), coreColorPicker.getTransitionColor());
     }
 
 }

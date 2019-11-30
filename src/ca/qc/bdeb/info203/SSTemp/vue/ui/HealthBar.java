@@ -13,8 +13,8 @@ import org.newdawn.slick.SlickException;
  */
 public class HealthBar extends Entity {
 
-    Modele modele;
-    Image heartImage;
+    private Modele modele;
+    private Image heartImage;
 
     public HealthBar(int x, int y, String imagePath, String hearthImagePath, Modele modele) {
         super(x, y, imagePath);

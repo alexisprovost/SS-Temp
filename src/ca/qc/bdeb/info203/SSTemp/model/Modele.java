@@ -7,6 +7,7 @@ package ca.qc.bdeb.info203.SSTemp.model;
 public class Modele {
 
     private final int MAX_HEALTH = 384;
+    private final int MAX_INVENTORY = 16384;
     private int health;
     private int rockInventory;
     private int rockOnMars;
@@ -41,8 +42,27 @@ public class Modele {
         }
     }
 
+    public void fillInventory(int asteroidSize) {
+        rockInventory += (asteroidSize * asteroidSize) / 2;
+        if (rockInventory > MAX_INVENTORY) {
+            rockInventory = MAX_INVENTORY;
+        }
+    }
+
+    public double getFilledPercentage() {
+        return (double) rockInventory / (double) MAX_INVENTORY;
+    }
+
+    public boolean isInventoryFull() {
+        return rockInventory >= MAX_INVENTORY;
+    }
+
     public int getMaxHealth() {
         return MAX_HEALTH;
+    }
+
+    public int getMaxInventory() {
+        return MAX_INVENTORY;
     }
 
     public int getHealth() {

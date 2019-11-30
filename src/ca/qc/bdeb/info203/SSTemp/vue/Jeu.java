@@ -5,15 +5,18 @@ import ca.qc.bdeb.info203.SSTemp.vue.entity.*;
 import ca.qc.bdeb.info203.SSTemp.vue.res.*;
 import ca.qc.bdeb.info203.SSTemp.vue.entity.Bullet;
 import ca.qc.bdeb.info203.SSTemp.vue.ui.HealthBar;
+import ca.qc.bdeb.info203.SSTemp.vue.ui.InventoryBar;
 import java.util.ArrayList;
 import java.util.Random;
 import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.tests.xml.Inventory;
 
 /**
  *
@@ -76,9 +79,13 @@ public class Jeu extends BasicGame {
 
     private String heartImagePath;
 
+    private String rockImagePath;
+
     private Player player;
 
     private MarsState controllerMars;
+
+    private CoreColorPicker coreColorPicker;
 
     private Parachute parachute;
 
@@ -98,17 +105,21 @@ public class Jeu extends BasicGame {
         this.container = container;
         loadSprites();
 
-        controllerMars = new MarsState();
         modele = new Modele();
+        coreColorPicker = new CoreColorPicker(Color.red, new Color(166, 200, 252), modele);
+        controllerMars = new MarsState();
 
-        HealthBar h = new HealthBar(10, 10, barImagePath, heartImagePath, modele);
-        ui.add(h);
+        HealthBar healthBar = new HealthBar(10, 10, barImagePath, heartImagePath, modele);
+        ui.add(healthBar);
+
+        InventoryBar inventoryBar = new InventoryBar(10, 50, barImagePath, rockImagePath, modele, coreColorPicker);
+        ui.add(inventoryBar);
 
         Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, marsImagePath, starSpriteSheet, controllerMars);
         entites.add(b);
         mobiles.add(b);
 
-        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath, controllerMars);
+        player = new Player(0, 0, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath, controllerMars, coreColorPicker);
         entites.add(player);
         mobiles.add(player);
         collisionables.add(player);
@@ -218,6 +229,7 @@ public class Jeu extends BasicGame {
             marsImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Mars.png";
             barImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Bar.png";
             heartImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Heart.png";
+            rockImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Rock.png";
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);
             System.exit(1);
@@ -359,11 +371,47 @@ public class Jeu extends BasicGame {
             if (collisionable instanceof Asteroid) {
                 Asteroid asteroid = (Asteroid) collisionable;
                 if (player.getRectangle().intersects(asteroid.getRectangle())) {
-                    modele.removeHealth(asteroid.getWidth());
+                    if (canCollectAsteroid(player, asteroid)) {
+                        modele.fillInventory(asteroid.getWidth());
+                        player.collectAsteroid();
+                    } else {
+                        modele.removeHealth(asteroid.getWidth());
+                    }
                     asteroid.setDetruire(true);
                 }
             }
         }
+    }
+
+    private boolean canCollectAsteroid(Player player, Asteroid asteroid) {
+        boolean canCollectAsteroid;
+        if (modele.isInventoryFull()) {
+            canCollectAsteroid = false;
+        } else if (asteroid.getWidth() >= 128) {
+            canCollectAsteroid = false;
+        } else {
+            int playerTop = player.getY();
+            int playerBottom = playerTop + player.getHeight();
+            int asteroidTop = asteroid.getY();
+            int asteroidBottom = asteroidTop + asteroid.getHeight();
+            boolean topClear = asteroidTop >= playerTop;
+            boolean bottomClear = asteroidBottom <= playerBottom;
+            boolean insideFront = asteroid.getX() > player.getX();
+            if (insideFront) {
+                if (topClear && bottomClear) {
+                    canCollectAsteroid = true;
+                } else if (topClear) {
+                    canCollectAsteroid = playerBottom - asteroidTop > (player.getX() + player.getWidth()) - asteroid.getX();
+                } else if (bottomClear) {
+                    canCollectAsteroid = asteroidBottom - playerTop > (player.getX() + player.getWidth()) - asteroid.getX();
+                } else {
+                    canCollectAsteroid = false;
+                }
+            } else {
+                canCollectAsteroid = false;
+            }
+        }
+        return canCollectAsteroid;
     }
 
     private void goToMars() {

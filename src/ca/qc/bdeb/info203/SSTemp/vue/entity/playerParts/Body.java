@@ -24,12 +24,28 @@ public class Body extends PlayerPart {
     }
 
     private void initAbsorbAnimation() {
-
+        this.absorbAnimation = new Animation();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (!((i == 0 && j == 0) || (i == 3 && j == 2))) {
+                    this.absorbAnimation.addFrame(getSpriteSheet().getSubImage(j, i), 100);
+                }
+            }
+        }
+        this.absorbAnimation.setLooping(false);
+        this.absorbAnimation.stop();
     }
 
     @Override
     public void dessiner(Graphics g) {
-        g.drawImage(idleImage, getX(), getY());
+        if (absorbAnimation.isStopped()) {
+            g.drawImage(idleImage, getX(), getY());
+        } else {
+            g.drawAnimation(absorbAnimation, getX(), getY());
+        }
     }
 
+    public void startAnimation() {
+        absorbAnimation.restart();
+    }
 }

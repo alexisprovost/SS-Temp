@@ -1,5 +1,6 @@
 package ca.qc.bdeb.info203.SSTemp.vue.entity.playerParts;
 
+import ca.qc.bdeb.info203.SSTemp.vue.CoreColorPicker;
 import ca.qc.bdeb.info203.SSTemp.vue.res.PlayerPart;
 import ca.qc.bdeb.info203.SSTemp.vue.entity.Player;
 import org.newdawn.slick.Animation;
@@ -17,9 +18,11 @@ public class CoreLaser extends PlayerPart {
     private Image idleImage;
     private Animation shootingAnimation;
     private Animation reverseTransition;
+    private CoreColorPicker coreColorPicker;
 
-    public CoreLaser(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset) {
+    public CoreLaser(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset, CoreColorPicker coreColorPicker) {
         super(player, spriteSheet, xOffset, yOffset);
+        this.coreColorPicker = coreColorPicker;
         initIdleImage();
         initShootingAnimation();
         initReverseTransition();
@@ -68,12 +71,12 @@ public class CoreLaser extends PlayerPart {
     @Override
     public void dessiner(Graphics g) {
         if (!shootingAnimation.isStopped()) {
-            g.drawAnimation(shootingAnimation, getX(), getY(), new Color(166, 200, 252));
+            g.drawAnimation(shootingAnimation, getX(), getY(), coreColorPicker.getTransitionColor());
 
         } else if (!reverseTransition.isStopped()) {
-            g.drawAnimation(reverseTransition, getX(), getY(), new Color(166, 200, 252));
+            g.drawAnimation(reverseTransition, getX(), getY(), coreColorPicker.getTransitionColor());
         } else {
-            g.drawImage(idleImage, getX(), getY(), new Color(166, 200, 252));
+            g.drawImage(idleImage, getX(), getY(), coreColorPicker.getTransitionColor());
         }
     }
 }

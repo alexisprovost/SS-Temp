@@ -6,7 +6,6 @@ import ca.qc.bdeb.info203.SSTemp.vue.res.Entity;
 import ca.qc.bdeb.info203.SSTemp.vue.res.Mobile;
 import java.util.Random;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
 public class Asteroid extends Entity implements Mobile, Collisionable {
