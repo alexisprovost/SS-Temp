@@ -1,5 +1,6 @@
 package ca.qc.bdeb.info203.SSTemp;
 
+import ca.qc.bdeb.info203.SSTemp.vue.Jeu;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
