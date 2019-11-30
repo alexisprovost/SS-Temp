@@ -332,6 +332,7 @@ public class Jeu extends BasicGame {
 
     private void spawnParachute() {
         if (controllerMars.isSpawnParachute()) {
+            modele.envoyerSurMars();
             this.parachute = new Parachute(player.getX() + 23, player.getY() + 23, parachuteSpriteSheet);
             entites.add(parachute);
             mobiles.add(parachute);
@@ -344,12 +345,14 @@ public class Jeu extends BasicGame {
     }
 
     private void manageCollisons() {
-        for (Collisionable collisionable : collisionables) {
-            if (collisionable instanceof Bullet) {
-                bulletAsteroidCollisions((Bullet) collisionable);
-            }
-            if (collisionable instanceof Player) {
-                playerAsteroidCollisions((Player) collisionable);
+        if (!controllerMars.isGamePaused()) {
+            for (Collisionable collisionable : collisionables) {
+                if (collisionable instanceof Bullet) {
+                    bulletAsteroidCollisions((Bullet) collisionable);
+                }
+                if (collisionable instanceof Player) {
+                    playerAsteroidCollisions((Player) collisionable);
+                }
             }
         }
     }

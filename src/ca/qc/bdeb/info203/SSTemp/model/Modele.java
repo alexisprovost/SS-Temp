@@ -49,6 +49,11 @@ public class Modele {
         }
     }
 
+    public void envoyerSurMars() {
+        rockOnMars += rockInventory;
+        rockInventory = 0;
+    }
+
     public double getFilledPercentage() {
         return (double) rockInventory / (double) MAX_INVENTORY;
     }
