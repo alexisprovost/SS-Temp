@@ -223,7 +223,7 @@ public class Jeu extends BasicGame {
             playerLeftPropulsorSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerLeftPropulsorSpriteSheet.png", 56, 34);
             asteroidSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/AsteroidSpriteSheet.png", 16, 16);
             starSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/StarSpriteSheet.png", 2, 2);
-            parachuteSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/ParachuteSpriteSheet.png", 31, 50);
+            parachuteSpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/ParachuteSpriteSheet.png", 78, 118);
             bulletImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Bullet.png";
             planetChunkImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/BackgroundChunk.png";
             marsImagePath = "ca/qc/bdeb/info203/SSTemp/sprites/Mars.png";

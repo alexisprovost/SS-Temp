@@ -108,26 +108,34 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
     public void bouger(int limiteX, int limiteY) {
         Random rnd = new Random();
 
-        if (getX() + getWidth() >= limiteX + extraSpace) {
-            xSpeed *= -1;
-        }
+        boolean backWallHit = getX() + getWidth() >= limiteX + extraSpace;
+        boolean bottomWallHit = getY() + getHeight() >= limiteY + extraSpace;
+        boolean frontWallHit = getX() <= -extraSpace;
+        boolean topWallHit = getY() <= -extraSpace;
 
-        if (getY() + getHeight() >= limiteY + extraSpace) {
-            //Just TP
-            //setDetruire(true);
+        if (backWallHit || bottomWallHit || frontWallHit || topWallHit) {
             setLocation(largeurEcran + 150, rnd.nextInt(hauteurEcran));
+            chooseRandomSpeed(rnd);
         }
 
-        if (getX() <= -extraSpace) {
-            //Just TP
-            //setDetruire(true);
-            setLocation(largeurEcran + 150, rnd.nextInt(hauteurEcran));
-        }
-
-        if (getY() <= -extraSpace) {
-            ySpeed *= -1;
-        }
-
+//        if (backWallHit) {
+//            xSpeed *= -1;
+//            System.out.println("back wall");
+//        }
+//
+//        if (bottomWallHit) {
+//            setLocation(largeurEcran + 150, rnd.nextInt(hauteurEcran));
+//            chooseRandomSpeed(rnd);
+//        }
+//
+//        if (frontWallHit) {
+//            setLocation(largeurEcran + 150, rnd.nextInt(hauteurEcran));
+//            chooseRandomSpeed(rnd);
+//        }
+//
+//        if (topWallHit) {
+//            ySpeed *= -1;
+//        }
         getImage().setRotation(getImage().getRotation() + 1);
         setLocation(getX() + xSpeed, getY() + ySpeed);
     }
