@@ -143,6 +143,8 @@ public class Player extends Entity implements Mobile, Collisionable {
             } else if (getX() > (limiteX - getWidth()) / 2) {
                 controllerMars.setSpawnParachute(true);
                 controllerMars.setLeaveMars(true);
+                //TP Asteroid
+                
             }
         } else if (getX() > controllerMars.getInitialX()) {
             controllerMars.setGamePaused(false);

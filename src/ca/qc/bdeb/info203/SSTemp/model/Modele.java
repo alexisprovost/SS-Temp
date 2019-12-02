@@ -11,6 +11,8 @@ public class Modele {
     private int health;
     private int rockInventory;
     private int rockOnMars;
+    private boolean playerIsDead = false;
+    private int nbEnvoieSurMars = 0;
 
     public Modele() {
         this.health = MAX_HEALTH;
@@ -37,7 +39,9 @@ public class Modele {
                 System.out.println("Invalid Asteroid Size");
                 break;
         }
-        if (health < 0) {
+        if (health <= 0) {
+            //Player is dead
+            playerIsDead = true;
             health = 0;
         }
     }
@@ -52,6 +56,7 @@ public class Modele {
     public void envoyerSurMars() {
         rockOnMars += rockInventory;
         rockInventory = 0;
+        nbEnvoieSurMars++;
     }
 
     public double getFilledPercentage() {
@@ -82,4 +87,11 @@ public class Modele {
         return rockOnMars;
     }
 
+    public boolean isPlayerIsDead() {
+        return playerIsDead;
+    }
+
+    public int getNbEnvoieSurMars() {
+        return nbEnvoieSurMars;
+    }
 }
