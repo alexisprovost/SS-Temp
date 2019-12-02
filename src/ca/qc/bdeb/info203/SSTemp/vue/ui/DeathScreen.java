@@ -31,9 +31,15 @@ public class DeathScreen extends Entity {
     public void dessiner(Graphics g) {
         g.drawImage(deathBg, 0, 0);
 
-        g.drawString("GAME OVER", largeurEcran/2, longeurEcran/2);
+        String go = "GAME OVER";
+        int sizeGo = g.getFont().getWidth(go);
         
-        g.drawString("Press R to restart", largeurEcran/2, longeurEcran/2 + 30);
+        g.drawString(go, largeurEcran/2 - sizeGo/2, longeurEcran/2);
+        
+        String restartKey = "Press R to restart";
+        int sizeRestart = g.getFont().getWidth(restartKey);
+        
+        g.drawString(restartKey, largeurEcran/2 - sizeRestart/2, longeurEcran/2 + 30);
 
         deathBg.setAlpha(0);
 

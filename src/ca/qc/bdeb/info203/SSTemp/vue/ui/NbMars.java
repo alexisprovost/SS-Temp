@@ -23,7 +23,7 @@ public class NbMars extends Entity{
     
     @Override
     public void dessiner(Graphics g) {
-        g.drawString("Voyages Sur Mars: " + modele.getNbEnvoieSurMars(), 148, 100);
+        g.drawString("Nb Envoyé Sur Mars: " + modele.getNbEnvoieSurMars(), 148, 100);
     }
     
 }

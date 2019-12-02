@@ -40,7 +40,6 @@ public class Modele {
                 break;
         }
         if (health <= 0) {
-            //Player is dead
             playerIsDead = true;
             health = 0;
         }
@@ -93,5 +92,5 @@ public class Modele {
 
     public int getNbEnvoieSurMars() {
         return nbEnvoieSurMars;
-    }
+    }  
 }

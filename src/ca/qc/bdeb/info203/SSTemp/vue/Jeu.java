@@ -15,6 +15,8 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -106,6 +108,9 @@ public class Jeu extends BasicGame {
     private float musicVolume = 0.05f;
 
     private DeathScreen deathScreen;
+    
+    private boolean deathEnable;
+    
 
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
@@ -117,6 +122,10 @@ public class Jeu extends BasicGame {
         this.container = container;
         loadSprites();
 
+        initializeGame();
+    }
+
+    private void initializeGame() {
         modele = new Modele();
         coreColorPicker = new CoreColorPicker(Color.red, new Color(166, 200, 252), modele);
         controllerMars = new MarsState();
@@ -150,10 +159,12 @@ public class Jeu extends BasicGame {
         }
 
         asteroidAppearance();
+        
+        deathEnable = true;
     }
 
     private void asteroidAppearance() {
-        
+
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
@@ -206,7 +217,10 @@ public class Jeu extends BasicGame {
             container.exit();
         } else if (key == Input.KEY_M) {
             pauseMusic();
+        } else if (key == Input.KEY_R) {
+            restart();
         }
+
         if (!controllerMars.isGamePaused()) {
             switch (key) {
                 case Input.KEY_W:
@@ -225,9 +239,7 @@ public class Jeu extends BasicGame {
                     player.shootBullet(false);
                     break;
                 case Input.KEY_E:
-                    if (modele.isInventoryFull()) {
-                        goToMars();
-                    }
+                    goToMars();
                     break;
             }
         }
@@ -254,6 +266,20 @@ public class Jeu extends BasicGame {
             System.out.println("SlickException :" + se);
             System.exit(1);
         }
+    }
+
+    private void restart() {
+        mobiles.clear();
+
+        entites.clear();
+
+        collisionables.clear();
+
+        ui.clear();
+
+        pauseMusic();
+        
+        initializeGame();
     }
 
     private void detruireEntites() {
@@ -387,15 +413,16 @@ public class Jeu extends BasicGame {
         }
     }
 
-    private boolean deathEnable = true;
+    
 
     private void checkIfDead() {
         if (modele.isPlayerIsDead() && deathEnable) {
             deathEnable = false;
             sound.stop();
+            sound.play(0.5f, musicVolume);
             deathScreen = new DeathScreen(deathBg, largeurEcran, hauteurEcran);
-            entites.add(deathScreen);
-            startMusic(0.5f, musicVolume, "ca/qc/bdeb/info203/SSTemp/sounds/background.ogg");
+            ui.add(deathScreen);
+            //startMusic(0.5f, musicVolume, "ca/qc/bdeb/info203/SSTemp/sounds/background.ogg");
             controllerMars.setGamePaused(true);
         }
     }
