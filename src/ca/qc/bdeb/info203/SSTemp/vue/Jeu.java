@@ -105,7 +105,7 @@ public class Jeu extends BasicGame {
 
     private boolean musicPaused;
 
-    private float musicVolume = 0.05f;
+    private float musicVolume = 0.1f;
 
     private DeathScreen deathScreen;
     
@@ -277,7 +277,7 @@ public class Jeu extends BasicGame {
 
         ui.clear();
 
-        pauseMusic();
+        sound.stop();
         
         initializeGame();
     }
