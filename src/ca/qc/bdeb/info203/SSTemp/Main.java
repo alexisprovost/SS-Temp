@@ -24,7 +24,7 @@ public class Main {
             AppGameContainer app = new AppGameContainer(new Jeu(1920, 1080));
             //app.setMinimumLogicUpdateInterval(15);
             app.setDisplayMode(1920, 1080, true);
-            app.setShowFPS(false);
+            app.setShowFPS(true);
             app.setVSync(true);
             app.start();
         } catch (SlickException e) {

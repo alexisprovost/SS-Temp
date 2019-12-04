@@ -5,16 +5,16 @@ import ca.qc.bdeb.info203.SSTemp.vue.entity.*;
 import ca.qc.bdeb.info203.SSTemp.vue.res.*;
 import ca.qc.bdeb.info203.SSTemp.vue.entity.Bullet;
 import ca.qc.bdeb.info203.SSTemp.vue.ui.DeathScreen;
+import ca.qc.bdeb.info203.SSTemp.vue.ui.GoToMarsNotice;
 import ca.qc.bdeb.info203.SSTemp.vue.ui.HealthBar;
 import ca.qc.bdeb.info203.SSTemp.vue.ui.InventoryBar;
 import ca.qc.bdeb.info203.SSTemp.vue.ui.NbMars;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.BasicGame;
@@ -22,9 +22,11 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 
 /**
  *
@@ -99,9 +101,13 @@ public class Jeu extends BasicGame {
 
     private Parachute parachute;
 
-    private Sound sound;
+    private Music music;
 
     private Modele modele;
+
+    private GoToMarsNotice goToMarsNotice;
+
+    private UnicodeFont font;
 
     private boolean musicPaused;
 
@@ -121,12 +127,13 @@ public class Jeu extends BasicGame {
     public void init(GameContainer container) throws SlickException {
         this.container = container;
         loadSprites();
-
+        loadFont();
         initializeGame();
     }
 
     private void initializeGame() {
         modele = new Modele();
+        goToMarsNotice = null;
         coreColorPicker = new CoreColorPicker(Color.red, new Color(166, 200, 252), modele);
         controllerMars = new MarsState();
 
@@ -136,7 +143,7 @@ public class Jeu extends BasicGame {
         InventoryBar inventoryBar = new InventoryBar(10, 50, barImagePath, rockImagePath, modele, coreColorPicker);
         ui.add(inventoryBar);
 
-        NbMars nbMars = new NbMars(modele);
+        NbMars nbMars = new NbMars(modele, largeurEcran);
         ui.add(nbMars);
 
         Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, marsImagePath, starSpriteSheet, controllerMars);
@@ -150,6 +157,12 @@ public class Jeu extends BasicGame {
 
         startMusic(1, musicVolume, "ca/qc/bdeb/info203/SSTemp/sounds/background.ogg");
 
+        asteroidAppearance();
+        
+        deathEnable = true;
+    }
+
+    private void asteroidAppearance() {
         for (int i = 0; i < 20; i++) {
             Random rnd = new Random();
             Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 0, 256, 256, controllerMars, hauteurEcran, largeurEcran);
@@ -157,18 +170,11 @@ public class Jeu extends BasicGame {
             mobiles.add(asteroid);
             collisionables.add(asteroid);
         }
-
-        asteroidAppearance();
-        
-        deathEnable = true;
-    }
-
-    private void asteroidAppearance() {
-
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
         spawnParachute();
+        avoidInstantDeath();
 
         for (Mobile mobile : mobiles) {
             mobile.bouger(largeurEcran, hauteurEcran);
@@ -180,6 +186,7 @@ public class Jeu extends BasicGame {
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
+        g.setFont(font);
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
@@ -217,7 +224,7 @@ public class Jeu extends BasicGame {
             container.exit();
         } else if (key == Input.KEY_M) {
             pauseMusic();
-        } else if (key == Input.KEY_R) {
+        } else if (key == Input.KEY_R && modele.isPlayerIsDead()) {
             restart();
         }
 
@@ -268,6 +275,26 @@ public class Jeu extends BasicGame {
         }
     }
 
+    private void loadFont() {
+        try {
+            Font tempFont = Font.createFont(Font.TRUETYPE_FONT, new File("Mecha.ttf"));
+            tempFont = tempFont.deriveFont(Font.PLAIN, 24f);
+            font = new UnicodeFont(tempFont);
+            font.getEffects().add(new ColorEffect());
+            font.addAsciiGlyphs();
+            font.loadGlyphs();
+        } catch (FontFormatException ffe) {
+            System.out.println("FontFormatException :" + ffe);
+            System.exit(1);
+        } catch (IOException ioe) {
+            System.out.println("IOException :" + ioe);
+            System.exit(1);
+        } catch (SlickException se) {
+            System.out.println("SlickException :" + se);
+            System.exit(1);
+        }
+    }
+
     private void restart() {
         mobiles.clear();
 
@@ -277,7 +304,7 @@ public class Jeu extends BasicGame {
 
         ui.clear();
 
-        sound.stop();
+        music.stop();
         
         initializeGame();
     }
@@ -348,9 +375,8 @@ public class Jeu extends BasicGame {
 
     private void startMusic(float pitch, float volume, String path) {
         try {
-            sound = new Sound(path);
-
-            sound.loop(pitch, volume);
+            music = new Music(path);
+            music.loop(pitch, volume);
             musicPaused = false;
         } catch (SlickException e) {
             System.out.println("File not found or Library Missing");
@@ -359,10 +385,10 @@ public class Jeu extends BasicGame {
 
     private void pauseMusic() {
         if (musicPaused) {
-            sound.loop(1, musicVolume);
+            music.loop(1, musicVolume);
             musicPaused = false;
         } else {
-            sound.stop();
+            music.stop();
             musicPaused = true;
         }
     }
@@ -387,16 +413,19 @@ public class Jeu extends BasicGame {
         if (controllerMars.isRemoveParachute()) {
             parachute.setDetruire(true);
             controllerMars.setRemoveParachute(false);
-            avoidInstantDeath();
         }
     }
 
     private void avoidInstantDeath() {
-        for (Entity entite : entites) {
-            if (entite instanceof Asteroid) {
-                ((Asteroid) entite).setLocation(largeurEcran + 200, entite.getY());
+        if (controllerMars.isResetAsteroid()) {
+            for (Entity entite : entites) {
+                if (entite instanceof Asteroid) {
+                    ((Asteroid) entite).setLocation(largeurEcran + 200, entite.getY());
+                }
             }
-        }
+            controllerMars.setResetAsteroid(false);
+            controllerMars.setHideAsteroids(false);
+        }        
     }
 
     private void manageCollisons() {
@@ -418,11 +447,12 @@ public class Jeu extends BasicGame {
     private void checkIfDead() {
         if (modele.isPlayerIsDead() && deathEnable) {
             deathEnable = false;
-            sound.stop();
-            sound.play(0.5f, musicVolume);
+            float time = music.getPosition();
+            music.stop();
+            music.play(0.5f, musicVolume);
+            music.setPosition(time);
             deathScreen = new DeathScreen(deathBg, largeurEcran, hauteurEcran);
             ui.add(deathScreen);
-            //startMusic(0.5f, musicVolume, "ca/qc/bdeb/info203/SSTemp/sounds/background.ogg");
             controllerMars.setGamePaused(true);
         }
     }
@@ -446,6 +476,10 @@ public class Jeu extends BasicGame {
                 if (player.getRectangle().intersects(asteroid.getRectangle())) {
                     if (canCollectAsteroid(player, asteroid)) {
                         modele.fillInventory(asteroid.getWidth());
+                        if (modele.isInventoryFull()) {
+                            goToMarsNotice = new GoToMarsNotice(30, largeurEcran, hauteurEcran);
+                            ui.add(goToMarsNotice);
+                        }
                         player.collectAsteroid();
                     } else {
                         modele.removeHealth(asteroid.getWidth());
@@ -496,5 +530,7 @@ public class Jeu extends BasicGame {
         controllerMars.setPauseGame(true);
         controllerMars.setGoingToMars(true);
         controllerMars.setInitialCoordinates(player.getX(), player.getY());
+        ui.remove(goToMarsNotice);
+        goToMarsNotice = null;
     }
 }

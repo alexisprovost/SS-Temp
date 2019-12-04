@@ -16,14 +16,18 @@ import org.newdawn.slick.Graphics;
 public class NbMars extends Entity{
     
     private Modele modele;
+    private int screenWidth;
 
-    public NbMars(Modele modele) {
+    public NbMars(Modele modele, int screenWidth) {
         this.modele = modele;
+        this.screenWidth = screenWidth;
     }
     
     @Override
     public void dessiner(Graphics g) {
-        g.drawString("Nb Envoyé Sur Mars: " + modele.getRockOnMars(), 148, 100);
+        String text = "Minerais Envoyé Sur Mars: " + modele.getRockOnMars();
+        int stringWidth = g.getFont().getWidth(text);
+        g.drawString(text, screenWidth - stringWidth - 10, 10);
     }
     
 }

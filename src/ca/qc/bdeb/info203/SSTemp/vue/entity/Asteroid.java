@@ -16,7 +16,7 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
 
     private int xSpeed;
     private int ySpeed;
-    private int maxSpeed = 6;
+    private int maxSpeed = 10;
     private int extraSpace = 500;
     private int hauteurEcran = 0;
     private int largeurEcran = 0;
@@ -72,10 +72,8 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
 
     @Override
     public void dessiner(Graphics g) {
-        if (!controllerMars.isOnMars()) {
+        if (!controllerMars.isHideAsteroids()) {
             g.drawImage(getImage(), getX(), getY());
-            //g.drawRect(getX(),getY(),getWidth(),getHeight());
-            //g.setColor(Color.blue);
         }
     }
 
@@ -117,25 +115,6 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
             setLocation(largeurEcran + 150, rnd.nextInt(hauteurEcran));
             chooseRandomSpeed(rnd);
         }
-
-//        if (backWallHit) {
-//            xSpeed *= -1;
-//            System.out.println("back wall");
-//        }
-//
-//        if (bottomWallHit) {
-//            setLocation(largeurEcran + 150, rnd.nextInt(hauteurEcran));
-//            chooseRandomSpeed(rnd);
-//        }
-//
-//        if (frontWallHit) {
-//            setLocation(largeurEcran + 150, rnd.nextInt(hauteurEcran));
-//            chooseRandomSpeed(rnd);
-//        }
-//
-//        if (topWallHit) {
-//            ySpeed *= -1;
-//        }
         getImage().setRotation(getImage().getRotation() + 1);
         setLocation(getX() + xSpeed, getY() + ySpeed);
     }

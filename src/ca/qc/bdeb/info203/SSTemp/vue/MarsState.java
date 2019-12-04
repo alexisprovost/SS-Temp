@@ -12,6 +12,8 @@ public class MarsState {
     private boolean spawnParachute;
     private boolean removeParachute;
     private boolean leavingMars;
+    private boolean resetAsteroid;
+    private boolean hideAsteroids;
 
     private int initialX;
     private int initialY;
@@ -74,6 +76,22 @@ public class MarsState {
 
     public void setRemoveParachute(boolean removeParachute) {
         this.removeParachute = removeParachute;
+    }
+
+    public void setResetAsteroid(boolean resetAsteroid) {
+        this.resetAsteroid = resetAsteroid;
+    }
+
+    public boolean isResetAsteroid() {
+        return resetAsteroid;
+    }
+
+    public void setHideAsteroids(boolean hideAsteroids) {
+        this.hideAsteroids = hideAsteroids;
+    }
+
+    public boolean isHideAsteroids() {
+        return hideAsteroids;
     }
 
     public void setInitialCoordinates(int x, int y) {
