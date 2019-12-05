@@ -8,15 +8,15 @@ import ca.qc.bdeb.info203.SSTemp.vue.ui.DeathScreen;
 import ca.qc.bdeb.info203.SSTemp.vue.ui.GoToMarsNotice;
 import ca.qc.bdeb.info203.SSTemp.vue.ui.HealthBar;
 import ca.qc.bdeb.info203.SSTemp.vue.ui.InventoryBar;
-import ca.qc.bdeb.info203.SSTemp.vue.ui.NbMars;
+import ca.qc.bdeb.info203.SSTemp.vue.ui.GameInfos;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -54,6 +54,10 @@ public class Jeu extends BasicGame {
      * Tous les éléments UI.
      */
     private ArrayList<Entity> ui = new ArrayList<>();
+    /**
+     * Les astéroïdes à ajouter
+     */
+    private ArrayList<Asteroid> asteroidsToAdd = new ArrayList<>();
     /**
      * Largeur de l'écran.
      */
@@ -142,8 +146,8 @@ public class Jeu extends BasicGame {
         InventoryBar inventoryBar = new InventoryBar(10, 50, barImagePath, rockImagePath, modele, coreColorPicker);
         ui.add(inventoryBar);
 
-        NbMars nbMars = new NbMars(modele, largeurEcran);
-        ui.add(nbMars);
+        GameInfos gameInfos = new GameInfos(modele, largeurEcran);
+        ui.add(gameInfos);
 
         Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, marsImagePath, starSpriteSheet, marsState);
         entites.add(b);
@@ -156,25 +160,23 @@ public class Jeu extends BasicGame {
 
         startMusic(1, musicVolume, "ca/qc/bdeb/info203/SSTemp/sounds/background.ogg");
 
-        asteroidAppearance();
+        scheduleAsteroidAppearance();
 
         deathEnable = true;
-    }
-
-    private void asteroidAppearance() {
-        for (int i = 0; i < 20; i++) {
-            Random rnd = new Random();
-            Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 0, 256, 256, marsState, hauteurEcran, largeurEcran);
-            entites.add(asteroid);
-            mobiles.add(asteroid);
-            collisionables.add(asteroid);
-        }
+        
+        modele.startTime();
     }
 
     public void update(GameContainer container, int delta) throws SlickException {
+        entites.addAll(asteroidsToAdd);
+        mobiles.addAll(asteroidsToAdd);
+        collisionables.addAll(asteroidsToAdd);
+
+        asteroidsToAdd.clear();
+        
         spawnParachute();
         avoidInstantDeath();
-
+        
         for (Mobile mobile : mobiles) {
             mobile.bouger(largeurEcran, hauteurEcran);
         }
@@ -186,6 +188,7 @@ public class Jeu extends BasicGame {
 
     public void render(GameContainer container, Graphics g) throws SlickException {
         g.setFont(font);
+
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
@@ -276,8 +279,8 @@ public class Jeu extends BasicGame {
 
     private void loadFont() {
         try {
-            Font tempFont = Font.createFont(Font.TRUETYPE_FONT, new File("Mecha.ttf"));
-            tempFont = tempFont.deriveFont(Font.PLAIN, 24f);
+            Font tempFont = Font.createFont(Font.TRUETYPE_FONT, new File("PressStart2.ttf"));
+            tempFont = tempFont.deriveFont(Font.PLAIN, 15f);
             font = new UnicodeFont(tempFont);
             font.getEffects().add(new ColorEffect());
             font.addAsciiGlyphs();
@@ -292,6 +295,19 @@ public class Jeu extends BasicGame {
             System.out.println("SlickException :" + se);
             System.exit(1);
         }
+    }
+
+    private void scheduleAsteroidAppearance() {
+        Random rnd = new Random();
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 5; i++) {
+                    asteroidsToAdd.add(new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 0, 256, 256, marsState, hauteurEcran, largeurEcran));
+                }
+            }
+        }, 0, 10000);
     }
 
     private void restart() {
@@ -449,7 +465,7 @@ public class Jeu extends BasicGame {
             music.play(0.5f, musicVolume);
             //music.loop();
             music.setPosition(time);
-            deathScreen = new DeathScreen(deathBg, largeurEcran, hauteurEcran);
+            deathScreen = new DeathScreen(modele, deathBg, largeurEcran, hauteurEcran);
             ui.add(deathScreen);
             marsState.setGamePaused(true);
         }

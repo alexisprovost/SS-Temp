@@ -13,21 +13,24 @@ import org.newdawn.slick.Graphics;
  *
  * @author Alexis
  */
-public class NbMars extends Entity{
+public class GameInfos extends Entity{
     
     private Modele modele;
     private int screenWidth;
 
-    public NbMars(Modele modele, int screenWidth) {
+    public GameInfos(Modele modele, int screenWidth) {
         this.modele = modele;
         this.screenWidth = screenWidth;
     }
     
     @Override
     public void dessiner(Graphics g) {
-        String text = "Minerais Envoyé Sur Mars: " + modele.getRockOnMars();
-        int stringWidth = g.getFont().getWidth(text);
-        g.drawString(text, screenWidth - stringWidth - 10, 10);
+        String minerals = "Minerais Envoyé Sur Mars: " + modele.getRockOnMars();
+        String time = "Durée de la partie: " + modele.getElapsedTime();
+        int mineralsStringWidth = g.getFont().getWidth(minerals);
+        int timeStringWidth = g.getFont().getWidth(time);
+        g.drawString(minerals, screenWidth - mineralsStringWidth - 10, 10);
+        g.drawString(time, screenWidth - timeStringWidth - 10, 40);
     }
     
 }

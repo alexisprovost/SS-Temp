@@ -26,6 +26,7 @@ public class Main {
             app.setShowFPS(false);
             app.setVSync(true);
             app.start();
+            //app.setMinimumLogicUpdateInterval(15);
         } catch (SlickException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,8 @@
 package ca.qc.bdeb.info203.SSTemp.model;
 
+import java.time.Duration;
+import java.time.Instant;
+
 /**
  *
  * @author 1850986
@@ -13,6 +16,9 @@ public class Modele {
     private int rockOnMars;
     private boolean playerIsDead = false;
     private int nbEnvoieSurMars = 0;
+    private Instant gameStart;
+    private Instant now;
+    private String time = "";
 
     public Modele() {
         this.health = MAX_HEALTH;
@@ -92,5 +98,24 @@ public class Modele {
 
     public int getNbEnvoieSurMars() {
         return nbEnvoieSurMars;
-    }  
+    }
+
+    public void startTime() {
+        gameStart = Instant.now();
+    }
+
+    public String getElapsedTime() {
+        if (!playerIsDead) {
+            now = Instant.now();
+            Duration timeElapsed = Duration.between(gameStart, now);
+            if (timeElapsed.toHours() > 0) {
+                time = timeElapsed.toHours() + ":" + (timeElapsed.toMinutes() - (timeElapsed.toHours() * 60)) + ":" + (timeElapsed.toSeconds() - (timeElapsed.toMinutes() * 60));
+            } else if (timeElapsed.toMinutes() > 0) {
+                time = timeElapsed.toMinutes() + ":" + (timeElapsed.toSeconds() - (timeElapsed.toMinutes() * 60));
+            } else {
+                time = timeElapsed.toSeconds() + "";
+            }
+        }
+        return time;
+    }
 }
