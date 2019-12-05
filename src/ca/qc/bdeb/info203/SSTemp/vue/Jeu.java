@@ -95,7 +95,7 @@ public class Jeu extends BasicGame {
 
     private Player player;
 
-    private MarsState controllerMars;
+    private MarsState marsState;
 
     private CoreColorPicker coreColorPicker;
 
@@ -114,9 +114,8 @@ public class Jeu extends BasicGame {
     private float musicVolume = 0.1f;
 
     private DeathScreen deathScreen;
-    
+
     private boolean deathEnable;
-    
 
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
@@ -135,7 +134,7 @@ public class Jeu extends BasicGame {
         modele = new Modele();
         goToMarsNotice = null;
         coreColorPicker = new CoreColorPicker(Color.red, new Color(166, 200, 252), modele);
-        controllerMars = new MarsState();
+        marsState = new MarsState();
 
         HealthBar healthBar = new HealthBar(10, 10, barImagePath, heartImagePath, modele);
         ui.add(healthBar);
@@ -146,11 +145,11 @@ public class Jeu extends BasicGame {
         NbMars nbMars = new NbMars(modele, largeurEcran);
         ui.add(nbMars);
 
-        Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, marsImagePath, starSpriteSheet, controllerMars);
+        Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, marsImagePath, starSpriteSheet, marsState);
         entites.add(b);
         mobiles.add(b);
 
-        player = new Player(largeurEcran / 16, hauteurEcran / 2, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath, controllerMars, coreColorPicker);
+        player = new Player(largeurEcran / 16, hauteurEcran / 2, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath, marsState, coreColorPicker);
         entites.add(player);
         mobiles.add(player);
         collisionables.add(player);
@@ -158,14 +157,14 @@ public class Jeu extends BasicGame {
         startMusic(1, musicVolume, "ca/qc/bdeb/info203/SSTemp/sounds/background.ogg");
 
         asteroidAppearance();
-        
+
         deathEnable = true;
     }
 
     private void asteroidAppearance() {
         for (int i = 0; i < 20; i++) {
             Random rnd = new Random();
-            Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 0, 256, 256, controllerMars, hauteurEcran, largeurEcran);
+            Asteroid asteroid = new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 0, 256, 256, marsState, hauteurEcran, largeurEcran);
             entites.add(asteroid);
             mobiles.add(asteroid);
             collisionables.add(asteroid);
@@ -197,7 +196,7 @@ public class Jeu extends BasicGame {
 
     @Override
     public void keyPressed(int key, char c) {
-        if (!controllerMars.isGamePaused()) {
+        if (!marsState.isGamePaused()) {
             switch (key) {
                 case Input.KEY_W:
                     player.moveUp(true);
@@ -228,7 +227,7 @@ public class Jeu extends BasicGame {
             restart();
         }
 
-        if (!controllerMars.isGamePaused()) {
+        if (!marsState.isGamePaused()) {
             switch (key) {
                 case Input.KEY_W:
                     player.moveUp(false);
@@ -305,7 +304,7 @@ public class Jeu extends BasicGame {
         ui.clear();
 
         music.stop();
-        
+
         initializeGame();
     }
 
@@ -341,23 +340,23 @@ public class Jeu extends BasicGame {
 
             switch (lastSize) {
                 case 256:
-                    asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 0, 256, 128, 128, controllerMars, hauteurEcran, largeurEcran);
-                    asteroid2 = new Asteroid(lastPosX - 20, lastPosY - rnd.nextInt(lastSize), asteroidSpriteSheet, 0, 256, 128, 128, controllerMars, hauteurEcran, largeurEcran);
+                    asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 0, 256, 128, 128, marsState, hauteurEcran, largeurEcran);
+                    asteroid2 = new Asteroid(lastPosX - 20, lastPosY - rnd.nextInt(lastSize), asteroidSpriteSheet, 0, 256, 128, 128, marsState, hauteurEcran, largeurEcran);
                     addNewAsteroids(asteroid1, asteroid2);
                     break;
                 case 128:
-                    asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars, hauteurEcran, largeurEcran);
-                    asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 256, 64, 64, controllerMars, hauteurEcran, largeurEcran);
+                    asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 256, 64, 64, marsState, hauteurEcran, largeurEcran);
+                    asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 256, 64, 64, marsState, hauteurEcran, largeurEcran);
                     addNewAsteroids(asteroid1, asteroid2);
                     break;
                 case 64:
-                    asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 320, 32, 32, controllerMars, hauteurEcran, largeurEcran);
-                    asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 320, 32, 32, controllerMars, hauteurEcran, largeurEcran);
+                    asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 320, 32, 32, marsState, hauteurEcran, largeurEcran);
+                    asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 320, 32, 32, marsState, hauteurEcran, largeurEcran);
                     addNewAsteroids(asteroid1, asteroid2);
                     break;
                 case 32:
-                    asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 352, 16, 16, controllerMars, hauteurEcran, largeurEcran);
-                    asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 352, 16, 16, controllerMars, hauteurEcran, largeurEcran);
+                    asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 352, 16, 16, marsState, hauteurEcran, largeurEcran);
+                    asteroid2 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 512, 352, 16, 16, marsState, hauteurEcran, largeurEcran);
                     addNewAsteroids(asteroid1, asteroid2);
                     break;
             }
@@ -403,33 +402,33 @@ public class Jeu extends BasicGame {
     }
 
     private void spawnParachute() {
-        if (controllerMars.isSpawnParachute()) {
+        if (marsState.isSpawnParachute()) {
             modele.envoyerSurMars();
             this.parachute = new Parachute(player.getX() + 23, player.getY() + 23, parachuteSpriteSheet);
             entites.add(parachute);
             mobiles.add(parachute);
-            controllerMars.setSpawnParachute(false);
+            marsState.setSpawnParachute(false);
         }
-        if (controllerMars.isRemoveParachute()) {
+        if (marsState.isRemoveParachute()) {
             parachute.setDetruire(true);
-            controllerMars.setRemoveParachute(false);
+            marsState.setRemoveParachute(false);
         }
     }
 
     private void avoidInstantDeath() {
-        if (controllerMars.isResetAsteroid()) {
+        if (marsState.isResetAsteroid()) {
             for (Entity entite : entites) {
                 if (entite instanceof Asteroid) {
                     ((Asteroid) entite).setLocation(largeurEcran + 200, entite.getY());
                 }
             }
-            controllerMars.setResetAsteroid(false);
-            controllerMars.setHideAsteroids(false);
-        }        
+            marsState.setResetAsteroid(false);
+            marsState.setHideAsteroids(false);
+        }
     }
 
     private void manageCollisons() {
-        if (!controllerMars.isGamePaused()) {
+        if (!marsState.isHideAsteroids() && !marsState.isGamePaused()) {
             for (Collisionable collisionable : collisionables) {
                 if (collisionable instanceof Bullet) {
                     bulletAsteroidCollisions((Bullet) collisionable);
@@ -442,8 +441,6 @@ public class Jeu extends BasicGame {
         }
     }
 
-    
-
     private void checkIfDead() {
         if (modele.isPlayerIsDead() && deathEnable) {
             deathEnable = false;
@@ -453,7 +450,7 @@ public class Jeu extends BasicGame {
             music.setPosition(time);
             deathScreen = new DeathScreen(deathBg, largeurEcran, hauteurEcran);
             ui.add(deathScreen);
-            controllerMars.setGamePaused(true);
+            marsState.setGamePaused(true);
         }
     }
 
@@ -527,9 +524,9 @@ public class Jeu extends BasicGame {
         player.moveUp(false);
         player.moveRight(true);
         player.shootBullet(false);
-        controllerMars.setPauseGame(true);
-        controllerMars.setGoingToMars(true);
-        controllerMars.setInitialCoordinates(player.getX(), player.getY());
+        marsState.setPauseGame(true);
+        marsState.setGoingToMars(true);
+        marsState.setInitialCoordinates(player.getX(), player.getY());
         ui.remove(goToMarsNotice);
         goToMarsNotice = null;
     }
