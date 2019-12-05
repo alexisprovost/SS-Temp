@@ -37,7 +37,7 @@ public class DeathScreen extends Entity {
         String go = "GAME OVER";
         int sizeGo = g.getFont().getWidth(go);
         
-        g.drawString(go, largeurEcran/2 - sizeGo/2, longeurEcran/2 - 45);
+        g.drawString(go, largeurEcran/2 - sizeGo/2, longeurEcran/2 - 75);
         
         String duree = "Durée de la partie: " + modele.getElapsedTime();
         int sizeDuree = g.getFont().getWidth(duree);
@@ -52,6 +52,6 @@ public class DeathScreen extends Entity {
         String restartKey = "Appuyez sur R pour rejouer ou sur ESC pour quitter";
         int sizeRestart = g.getFont().getWidth(restartKey);
         
-        g.drawString(restartKey, largeurEcran/2 - sizeRestart/2, longeurEcran/2 + 45);
+        g.drawString(restartKey, largeurEcran/2 - sizeRestart/2, longeurEcran/2 + 75);
     }
 }
