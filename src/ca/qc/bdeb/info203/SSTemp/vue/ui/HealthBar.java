@@ -8,14 +8,28 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 /**
- *
+ * Classe Barre de vie
  * @author Manuel Ramirez, Alexis Provost
  */
 public class HealthBar extends Entity {
 
+    /**
+     * Modèle du jeu
+     */
     private Modele modele;
+    /**
+     * Image d'icone du coeur
+     */
     private Image heartImage;
 
+    /**
+     * Constructeur de la barre de vie
+     * @param x Position de la barre de vie en x
+     * @param y Position de la barre de vie en y
+     * @param imagePath Chemin de l'image de la barre
+     * @param hearthImagePath Chemin de l'image de l'icone de coeur
+     * @param modele Modèle de jeu
+     */
     public HealthBar(int x, int y, String imagePath, String hearthImagePath, Modele modele) {
         super(x, y, imagePath);
         this.modele = modele;
