@@ -108,13 +108,8 @@ public class Modele {
         if (!playerIsDead) {
             now = Instant.now();
             Duration timeElapsed = Duration.between(gameStart, now);
-            if (timeElapsed.toHours() > 0) {
-                time = timeElapsed.toHours() + ":" + (timeElapsed.toMinutes() - (timeElapsed.toHours() * 60)) + ":" + (timeElapsed.toSeconds() - (timeElapsed.toMinutes() * 60));
-            } else if (timeElapsed.toMinutes() > 0) {
-                time = timeElapsed.toMinutes() + ":" + (timeElapsed.toSeconds() - (timeElapsed.toMinutes() * 60));
-            } else {
-                time = timeElapsed.toSeconds() + "";
-            }
+            long secondsElapsed = timeElapsed.toSeconds();
+            time = String.format("%02d:%02d", (secondsElapsed % 3600) / 60, (secondsElapsed % 60));
         }
         return time;
     }

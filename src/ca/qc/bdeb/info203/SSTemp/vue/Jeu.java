@@ -163,7 +163,7 @@ public class Jeu extends BasicGame {
         scheduleAsteroidAppearance();
 
         deathEnable = true;
-        
+
         modele.startTime();
     }
 
@@ -173,10 +173,10 @@ public class Jeu extends BasicGame {
         collisionables.addAll(asteroidsToAdd);
 
         asteroidsToAdd.clear();
-        
+
         spawnParachute();
         avoidInstantDeath();
-        
+
         for (Mobile mobile : mobiles) {
             mobile.bouger(largeurEcran, hauteurEcran);
         }
@@ -279,8 +279,8 @@ public class Jeu extends BasicGame {
 
     private void loadFont() {
         try {
-            Font tempFont = Font.createFont(Font.TRUETYPE_FONT, new File("PressStart2.ttf"));
-            tempFont = tempFont.deriveFont(Font.PLAIN, 15f);
+            Font tempFont = Font.createFont(Font.TRUETYPE_FONT, new File("Mecha.ttf"));
+            tempFont = tempFont.deriveFont(Font.PLAIN, 24f);
             font = new UnicodeFont(tempFont);
             font.getEffects().add(new ColorEffect());
             font.addAsciiGlyphs();
@@ -303,11 +303,11 @@ public class Jeu extends BasicGame {
         t.schedule(new TimerTask() {
             @Override
             public void run() {
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 3; i++) {
                     asteroidsToAdd.add(new Asteroid(largeurEcran + 150, rnd.nextInt(hauteurEcran), asteroidSpriteSheet, 0, 0, 256, 256, marsState, hauteurEcran, largeurEcran));
                 }
             }
-        }, 0, 10000);
+        }, 0, 15000);
     }
 
     private void restart() {
