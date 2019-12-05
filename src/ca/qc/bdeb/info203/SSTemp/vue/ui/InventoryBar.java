@@ -40,6 +40,6 @@ public class InventoryBar extends Entity {
         String inventory = modele.getRockInventory() + "/" + modele.getMaxInventory();
         int stringWidth = g.getFont().getWidth(inventory);
         int stringHeight = g.getFont().getHeight(inventory);
-        g.drawString(inventory, getX() + rockImage.getWidth() + 5 + (getWidth() - stringWidth) / 2, getY() + (getHeight() - stringHeight) / 2);
+        g.drawString(inventory, getX() + rockImage.getWidth() + 5 + (getWidth() - stringWidth) / 2, getY() + (getHeight() - stringHeight) / 2 - 1);
     }
 }

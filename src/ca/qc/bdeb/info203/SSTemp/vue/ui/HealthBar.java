@@ -37,7 +37,7 @@ public class HealthBar extends Entity {
         String health = modele.getHealth() + "/" + modele.getMaxHealth();
         int stringWidth = g.getFont().getWidth(health);
         int stringHeight = g.getFont().getHeight(health);
-        g.drawString(health, getX() + heartImage.getWidth() + 5 + (getWidth() - stringWidth) / 2, getY() + (getHeight() - stringHeight) / 2);
+        g.drawString(health, getX() + heartImage.getWidth() + 5 + (getWidth() - stringWidth) / 2, getY() + (getHeight() - stringHeight) / 2 - 1);
     }
 
 }
