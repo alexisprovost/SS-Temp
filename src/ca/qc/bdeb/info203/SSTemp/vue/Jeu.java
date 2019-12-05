@@ -447,6 +447,7 @@ public class Jeu extends BasicGame {
             float time = music.getPosition();
             music.stop();
             music.play(0.5f, musicVolume);
+            //music.loop();
             music.setPosition(time);
             deathScreen = new DeathScreen(deathBg, largeurEcran, hauteurEcran);
             ui.add(deathScreen);
@@ -480,6 +481,7 @@ public class Jeu extends BasicGame {
                         player.collectAsteroid();
                     } else {
                         modele.removeHealth(asteroid.getWidth());
+                        player.takeDamage();
                     }
                     asteroid.setDetruire(true);
                 }

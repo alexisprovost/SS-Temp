@@ -12,6 +12,14 @@ public class Body extends PlayerPart {
 
     private Image idleImage;
     private Animation absorbAnimation;
+    private Color renderColor;
+
+    private final int FLICKER_LENGTH = 3;
+    private final int MAX_FLICKER_COUNT = 6;
+    private int frameCounter;
+    private int flickerCount;
+    private boolean takeDamage;
+    private boolean redFlicker;
 
     public Body(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset) {
         super(player, spriteSheet, xOffset, yOffset);
@@ -36,12 +44,41 @@ public class Body extends PlayerPart {
         this.absorbAnimation.stop();
     }
 
+    public void takeDamage() {
+        takeDamage = true;
+    }
+
     @Override
     public void dessiner(Graphics g) {
+        verifyRenderColor();
         if (absorbAnimation.isStopped()) {
-            g.drawImage(idleImage, getX(), getY());
+            g.drawImage(idleImage, getX(), getY(), renderColor);
         } else {
-            g.drawAnimation(absorbAnimation, getX(), getY());
+            g.drawAnimation(absorbAnimation, getX(), getY(), renderColor);
+        }
+    }
+
+    private void verifyRenderColor() {
+        if (takeDamage) {
+            if (frameCounter > FLICKER_LENGTH) {
+                flickerCount++;
+                frameCounter = 0;
+                if (flickerCount > MAX_FLICKER_COUNT) {
+                    flickerCount = 0;
+                    redFlicker = false;
+                    takeDamage = false;
+                } else {
+                    redFlicker = !redFlicker;
+                }
+            } else {
+                frameCounter++;
+            }
+        }
+
+        if (redFlicker) {
+            renderColor = Color.red;
+        } else {
+            renderColor = null;
         }
     }
 

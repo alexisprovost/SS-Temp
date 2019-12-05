@@ -3,6 +3,7 @@ package ca.qc.bdeb.info203.SSTemp.vue.entity.playerParts;
 import ca.qc.bdeb.info203.SSTemp.vue.res.PlayerPart;
 import ca.qc.bdeb.info203.SSTemp.vue.entity.Player;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
@@ -19,6 +20,15 @@ public class Propulsor extends PlayerPart {
     private Animation transition;
     private Animation activeAnimation;
     private Animation reverseTransition;
+
+    private Color renderColor;
+
+    private final int FLICKER_LENGTH = 3;
+    private final int MAX_FLICKER_COUNT = 6;
+    private int frameCounter;
+    private int flickerCount;
+    private boolean takeDamage;
+    private boolean redFlicker;
 
     public Propulsor(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset) {
         super(player, spriteSheet, xOffset, yOffset);
@@ -86,23 +96,51 @@ public class Propulsor extends PlayerPart {
         }
     }
 
+    private void verifyRenderColor() {
+        if (takeDamage) {
+            if (frameCounter > FLICKER_LENGTH) {
+                flickerCount++;
+                frameCounter = 0;
+                if (flickerCount > MAX_FLICKER_COUNT) {
+                    flickerCount = 0;
+                    redFlicker = false;
+                    takeDamage = false;
+                } else {
+                    redFlicker = !redFlicker;
+                }
+            } else {
+                frameCounter++;
+            }
+        }
+
+        if (redFlicker) {
+            renderColor = Color.red;
+        } else {
+            renderColor = null;
+        }
+    }
+
     public void setPropulsorRotation(double x, double y) {
         this.rotationAngle = (int) Math.toDegrees(Math.atan2(y, x));
     }
 
+    public void takeDamage() {
+        takeDamage = true;
+    }
+
     @Override
     public void dessiner(Graphics g) {
-
+        verifyRenderColor();
         g.rotate(getX() + 38, getY() + 17, rotationAngle);
 
         if (!activeAnimation.isStopped()) {
-            g.drawAnimation(activeAnimation, getX(), getY());
+            g.drawAnimation(activeAnimation, getX(), getY(), renderColor);
         } else if (!transition.isStopped()) {
-            g.drawAnimation(transition, getX(), getY());
+            g.drawAnimation(transition, getX(), getY(), renderColor);
         } else if (!reverseTransition.isStopped()) {
-            g.drawAnimation(reverseTransition, getX(), getY());
+            g.drawAnimation(reverseTransition, getX(), getY(), renderColor);
         } else {
-            g.drawImage(idleImage, getX(), getY());
+            g.drawImage(idleImage, getX(), getY(), renderColor);
         }
 
         g.resetTransform();

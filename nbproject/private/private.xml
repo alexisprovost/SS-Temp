@@ -20,8 +20,19 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Proprietaire/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/Main.java</file>
-            <file>file:/C:/Users/Proprietaire/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/entity/Asteroid.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/MarsState.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/ui/GoToMarsNotice.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/entity/playerParts/Propulsor.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/entity/Asteroid.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/CoreColorPicker.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/Main.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/Jeu.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/ui/HealthBar.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/entity/Player.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/res/Entity.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/entity/playerParts/Body.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/model/Modele.java</file>
+            <file>file:/F:/Desktop/SS-Temp/src/ca/qc/bdeb/info203/SSTemp/vue/ui/InventoryBar.java</file>
         </group>
     </open-files>
 </project-private>

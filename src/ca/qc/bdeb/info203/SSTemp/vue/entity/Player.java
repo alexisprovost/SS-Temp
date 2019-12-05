@@ -152,6 +152,12 @@ public class Player extends Entity implements Mobile, Collisionable {
         }
     }
 
+    public void takeDamage() {
+        body.takeDamage();
+        rightPropulsor.takeDamage();
+        leftPropulsor.takeDamage();
+    }
+
     public void collectAsteroid() {
         body.startAnimation();
     }
