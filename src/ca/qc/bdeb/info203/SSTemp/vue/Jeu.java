@@ -32,6 +32,7 @@ import org.newdawn.slick.font.effects.ColorEffect;
  * Classe de base du jeu
  *
  * @author Manuel Ramirez, Alexis Provost
+ * @author Mathieu Grenon, Stéphane Lévesque
  */
 public class Jeu extends BasicGame {
 
