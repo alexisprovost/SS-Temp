@@ -9,7 +9,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 /**
- *
+ * Barre d'inventaire
  * @author Manuel Ramirez, Alexis Provost
  */
 public class InventoryBar extends Entity {
