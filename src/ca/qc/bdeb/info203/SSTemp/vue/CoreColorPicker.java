@@ -5,7 +5,7 @@ import org.newdawn.slick.Color;
 
 /**
  *
- * @author Manuel Ramirez
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class CoreColorPicker {
 

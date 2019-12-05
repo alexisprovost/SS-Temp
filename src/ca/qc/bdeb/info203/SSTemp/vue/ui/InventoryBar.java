@@ -10,7 +10,7 @@ import org.newdawn.slick.SlickException;
 
 /**
  *
- * @author Manuel Ramirez
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class InventoryBar extends Entity {
 

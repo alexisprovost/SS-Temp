@@ -11,7 +11,7 @@ import org.newdawn.slick.Graphics;
 
 /**
  *
- * @author Alexis
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class GameInfos extends Entity{
     

@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
 
 /**
  *
- * @author Manuel Ramirez
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class HealthBar extends Entity {
 

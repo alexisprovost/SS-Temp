@@ -7,7 +7,7 @@ import org.newdawn.slick.SpriteSheet;
 
 /**
  *
- * @author Manuel Ramirez
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class Parachute extends Entity implements Mobile {
 

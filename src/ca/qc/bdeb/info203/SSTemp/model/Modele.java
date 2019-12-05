@@ -5,7 +5,7 @@ import java.time.Instant;
 
 /**
  *
- * @author 1850986
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class Modele {
 

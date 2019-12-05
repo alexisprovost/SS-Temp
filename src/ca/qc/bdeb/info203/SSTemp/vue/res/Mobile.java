@@ -5,7 +5,7 @@ import org.lwjgl.util.Rectangle;
 /**
  * Objet mobile du jeu.
  *
- * @author Mathieu Grenon, Stéphane Lévesque
+ * @author Mathieu Grenon, Stéphane Lévesque, Manuel Ramirez, Alexis Provost
  */
 public interface Mobile {
 

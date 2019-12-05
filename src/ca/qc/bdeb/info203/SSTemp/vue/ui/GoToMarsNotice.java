@@ -6,7 +6,7 @@ import org.newdawn.slick.Graphics;
 
 /**
  *
- * @author Manuel
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class GoToMarsNotice extends Entity {
 

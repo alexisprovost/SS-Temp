@@ -8,6 +8,10 @@ import java.util.Random;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
 
+/**
+ * 
+ * @author Manuel Ramirez, Alexis Provost
+ */
 public class Asteroid extends Entity implements Mobile, Collisionable {
 
     private MarsState controllerMars;

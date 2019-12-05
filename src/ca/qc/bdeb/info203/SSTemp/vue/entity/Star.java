@@ -8,7 +8,7 @@ import org.newdawn.slick.SpriteSheet;
 
 /**
  *
- * @author Manuel Ramirez
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class Star extends Entity {
 

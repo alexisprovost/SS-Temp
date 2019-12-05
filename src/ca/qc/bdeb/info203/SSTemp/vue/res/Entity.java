@@ -9,7 +9,7 @@ import org.newdawn.slick.SpriteSheet;
 /**
  * Entité du jeu.
  *
- * @author Mathieu Grenon, Stéphane Lévesque
+ * @author Mathieu Grenon, Stéphane Lévesque, Manuel Ramirez, Alexis Provost
  *
  */
 public abstract class Entity {

@@ -30,7 +30,7 @@ import org.newdawn.slick.font.effects.ColorEffect;
 
 /**
  *
- * @author Mathieu Grenon, Stéphane Lévesque
+ * @author Mathieu Grenon, Stéphane Lévesque, Manuel Ramirez, Alexis Provost
  */
 public class Jeu extends BasicGame {
 
@@ -63,70 +63,161 @@ public class Jeu extends BasicGame {
      */
     private int largeurEcran;
     /**
-     * Heuteur de l'écran.
+     * Hauteur de l'écran.
      */
     private int hauteurEcran;
 
+    /**
+     * Sprite Sheet du vaisseau
+     */
     private SpriteSheet playerBodySpriteSheet;
 
+    /**
+     * Sprite Sheet du laser
+     */
     private SpriteSheet playerCoreLaserSpriteSheet;
 
+    /**
+     * Sprite Sheet des effets du coeur du vaisseau
+     */
     private SpriteSheet playerCoreEffectSpriteSheet;
 
+    /**
+     * Sprite Sheet du propulseur droit du vaisseau
+     */
     private SpriteSheet playerRightPropulsorSpriteSheet;
 
+    /**
+     * Sprite Sheet du propulseur gauche du vaisseau
+     */
     private SpriteSheet playerLeftPropulsorSpriteSheet;
 
+    /**
+     * Sprite Sheet des astéroïdes
+     */
     private SpriteSheet asteroidSpriteSheet;
 
+    /**
+     * Sprite Sheet des étoiles
+     */
     private SpriteSheet starSpriteSheet;
 
+    /**
+     * Sprite Sheet du parachute
+     */
     private SpriteSheet parachuteSpriteSheet;
 
+    /**
+     * Chemin de l'image d'arrière-plan de l'écran de mort
+     */
     private String deathBg;
 
+    /**
+     * Chemin de l'image des balles
+     */
     private String bulletImagePath;
 
+    /**
+     * Chemin de l'image d'une partie de l'arrière-plan
+     */
     private String planetChunkImagePath;
 
+    /**
+     * Chemin de l'image de l'arrière-plan de Mars
+     */
     private String marsImagePath;
 
+    /**
+     * Chemin de l'image de la barre de minérais
+     */
     private String barImagePath;
 
+    /**
+     * Chemin de l'image de la barre de vie
+     */
     private String heartImagePath;
 
+    /**
+     * Chemin de l'image de l'icône de la barre d'inventaire
+     */
     private String rockImagePath;
 
+    /**
+     * Joueur
+     */
     private Player player;
 
+    /**
+     * État de Mars
+     */
     private MarsState marsState;
 
+    /**
+     * Couleur du core du vaisseau
+     */
     private CoreColorPicker coreColorPicker;
 
+    /**
+     * Parachute
+     */
     private Parachute parachute;
 
+    /**
+     * Musique d'arrière-plan
+     */
     private Music music;
 
+    /**
+     * Modèle
+     */
     private Modele modele;
 
+    /**
+     * Alerte d'inventaire plein
+     */
     private GoToMarsNotice goToMarsNotice;
 
+    /**
+     * Police d'écriture personnalisée
+     */
     private UnicodeFont font;
 
+    /**
+     * Musique en pause
+     */
     private boolean musicPaused;
 
+    /**
+     * Volume de la musique
+     */
     private float musicVolume = 0.1f;
 
+    /**
+     * Écran de mort
+     */
     private DeathScreen deathScreen;
 
+    /**
+     * Écran de mort activée
+     */
     private boolean deathEnable;
 
+    /**
+     * Constructeur de Jeu
+     * @param largeur Largeur de l'écran
+     * @param hauteur Hauteur de l'écran
+     */
     public Jeu(int largeur, int hauteur) {
         super("SS-Temp");
         this.largeurEcran = largeur;
         this.hauteurEcran = hauteur;
     }
 
+    /**
+     * Initialisation Slick 2D
+     * @param container Conteneur de jeu Slick 2D
+     * @throws SlickException Exception Slick 2D
+     */
     public void init(GameContainer container) throws SlickException {
         this.container = container;
         loadSprites();
@@ -134,12 +225,16 @@ public class Jeu extends BasicGame {
         initializeGame();
     }
 
+    /**
+     * Méthode d'initialisation du jeu
+     */
     private void initializeGame() {
         modele = new Modele();
         goToMarsNotice = null;
         coreColorPicker = new CoreColorPicker(Color.red, new Color(166, 200, 252), modele);
         marsState = new MarsState();
 
+        //Création de l'interface de l'utilisateur
         HealthBar healthBar = new HealthBar(10, 10, barImagePath, heartImagePath, modele);
         ui.add(healthBar);
 
@@ -149,25 +244,38 @@ public class Jeu extends BasicGame {
         GameInfos gameInfos = new GameInfos(modele, largeurEcran);
         ui.add(gameInfos);
 
+        //Création du fond
         Background b = new Background(largeurEcran, hauteurEcran, 100, planetChunkImagePath, marsImagePath, starSpriteSheet, marsState);
         entites.add(b);
         mobiles.add(b);
 
+        //Nouveau Joueur
         player = new Player(largeurEcran / 16, hauteurEcran / 2, playerBodySpriteSheet, playerCoreLaserSpriteSheet, playerCoreEffectSpriteSheet, playerRightPropulsorSpriteSheet, playerLeftPropulsorSpriteSheet, bulletImagePath, marsState, coreColorPicker);
         entites.add(player);
         mobiles.add(player);
         collisionables.add(player);
 
+        //Lecture de la musique
         startMusic(1, musicVolume, "ca/qc/bdeb/info203/SSTemp/sounds/background.ogg");
 
+        //Planification de la création des astéroïdes
         scheduleAsteroidAppearance();
 
+        //reActive l'écran de mort
         deathEnable = true;
 
+        //Démare le temps de jeu
         modele.startTime();
     }
 
+    /**
+     * Méthode de mise à jour de Slick 2D
+     * @param container Conteneur Slick 2D
+     * @param delta Delta Slick 2D
+     * @throws SlickException Exception Slick 2D
+     */
     public void update(GameContainer container, int delta) throws SlickException {
+        //Ajout des nouveaux astéroïdes à ajouter
         entites.addAll(asteroidsToAdd);
         mobiles.addAll(asteroidsToAdd);
         collisionables.addAll(asteroidsToAdd);
@@ -177,6 +285,7 @@ public class Jeu extends BasicGame {
         spawnParachute();
         avoidInstantDeath();
 
+        //Bouge les mobiles
         for (Mobile mobile : mobiles) {
             mobile.bouger(largeurEcran, hauteurEcran);
         }
@@ -186,9 +295,17 @@ public class Jeu extends BasicGame {
         detruireEntites();
     }
 
+    /**
+     * Render Slick 2D
+     * @param container Conteneur Slick 2D
+     * @param g Graphiques Slick 2D
+     * @throws SlickException Exception Slick 2D
+     */
     public void render(GameContainer container, Graphics g) throws SlickException {
+        //Changement de la police d'écriture
         g.setFont(font);
 
+        //Afficher les entités et UI
         for (Entity entite : entites) {
             entite.dessiner(g);
         }
@@ -197,6 +314,11 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Méthode qui gère les entrées clavier
+     * @param key Touche clavier enfoncée par l'utilisateur en KEYCODE (@see org.newdawn.slick.Input)
+     * @param c Touche clavier enfoncée par l'utilisateur en Char
+     */
     @Override
     public void keyPressed(int key, char c) {
         if (!marsState.isGamePaused()) {
@@ -220,6 +342,11 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Méthode qui gère les relâches de touches clavier
+     * @param key Touche clavier enfoncée par l'utilisateur en KEYCODE (@see org.newdawn.slick.Input)
+     * @param c Touche clavier enfoncée par l'utilisateur en Char
+     */
     @Override
     public void keyReleased(int key, char c) {
         if (key == Input.KEY_ESCAPE) {
@@ -230,6 +357,7 @@ public class Jeu extends BasicGame {
             restart();
         }
 
+        //Touches non fonctionnelles lors d'un voyage sur mars
         if (!marsState.isGamePaused()) {
             switch (key) {
                 case Input.KEY_W:
@@ -254,6 +382,9 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Chargement des Sprites
+     */
     private void loadSprites() {
         try {
             playerBodySpriteSheet = new SpriteSheet("ca/qc/bdeb/info203/SSTemp/sprites/PlayerBodySpriteSheet.png", 123, 76);
@@ -277,6 +408,9 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Chargement de la police d'écriture personnalisé
+     */
     private void loadFont() {
         try {
             Font tempFont = Font.createFont(Font.TRUETYPE_FONT, new File("Mecha.ttf"));
@@ -297,6 +431,9 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Planification de l'apparition d'astéroïdes
+     */
     private void scheduleAsteroidAppearance() {
         Random rnd = new Random();
         Timer t = new Timer();
@@ -310,6 +447,9 @@ public class Jeu extends BasicGame {
         }, 0, 15000);
     }
 
+    /**
+     * Réinitialisation de nouvelle partie
+     */
     private void restart() {
         mobiles.clear();
 
@@ -324,6 +464,9 @@ public class Jeu extends BasicGame {
         initializeGame();
     }
 
+    /**
+     * Destruction d'entités
+     */
     private void detruireEntites() {
         ArrayList<Entity> aDetruire = new ArrayList<>();
         ArrayList<Asteroid> aSplit = new ArrayList<>();
@@ -345,6 +488,10 @@ public class Jeu extends BasicGame {
         splitAsteroid(aSplit);
     }
 
+    /**
+     * Séparation d'astéroïdes lorsqu'une balle rentre un contact avec un astéroïde
+     * @param aSplit Arraylist des astéroïdes à séparer
+     */
     private void splitAsteroid(ArrayList<Asteroid> aSplit) {
         for (Asteroid entite : aSplit) {
             Random rnd = new Random();
@@ -354,6 +501,7 @@ public class Jeu extends BasicGame {
             Asteroid asteroid1;
             Asteroid asteroid2;
 
+            //Choix selon grandeur originale
             switch (lastSize) {
                 case 256:
                     asteroid1 = new Asteroid(lastPosX + 20, lastPosY + rnd.nextInt(lastSize), asteroidSpriteSheet, 0, 256, 128, 128, marsState, hauteurEcran, largeurEcran);
@@ -379,6 +527,11 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Nouveaux astéroïdes lors de la séparation
+     * @param asteroid1 Partie 1 de la séparation
+     * @param asteroid2 Partie 2 de la séparation
+     */
     private void addNewAsteroids(Asteroid asteroid1, Asteroid asteroid2) {
         entites.add(asteroid1);
         mobiles.add(asteroid1);
@@ -388,16 +541,25 @@ public class Jeu extends BasicGame {
         collisionables.add(asteroid2);
     }
 
+    /**
+     * Lecture de la musique
+     * @param pitch Pitch du son
+     * @param volume Volume de la musique
+     * @param path Chemin du fichier audio .ogg
+     */
     private void startMusic(float pitch, float volume, String path) {
         try {
             music = new Music(path);
             music.loop(pitch, volume);
             musicPaused = false;
         } catch (SlickException e) {
-            System.out.println("File not found or Library Missing");
+            System.out.println("Slick Error - Music");
         }
     }
 
+    /**
+     * Met en pause la musique
+     */
     private void pauseMusic() {
         if (musicPaused) {
             music.loop(1, musicVolume);
@@ -408,6 +570,9 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Fais la création des balles (missiles) et l'ajout aux listes
+     */
     private void spawnBullet() {
         Bullet newBullet = player.shoot();
         if (newBullet != null) {
@@ -417,6 +582,9 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Crée le parachute lors du voyage sur mars
+     */
     private void spawnParachute() {
         if (marsState.isSpawnParachute()) {
             modele.envoyerSurMars();
@@ -431,6 +599,9 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Place les astéroïdes existants à l’extrémité droite du jeu pour ne pas mourir des que l’on revient de mars
+     */
     private void avoidInstantDeath() {
         if (marsState.isResetAsteroid()) {
             for (Entity entite : entites) {
@@ -443,6 +614,9 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Gère les collisions avec le joueur, missile avec les astéroïdes
+     */
     private void manageCollisons() {
         if (!marsState.isHideAsteroids() && !marsState.isGamePaused()) {
             for (Collisionable collisionable : collisionables) {
@@ -457,6 +631,9 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Regarde si le joueur est mort si oui affiche l'écran de mort
+     */
     private void checkIfDead() {
         if (modele.isPlayerIsDead() && deathEnable) {
             deathEnable = false;
@@ -471,6 +648,10 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Gère les collisions des missiles avec les astéroïdes
+     * @param bullet Missile
+     */
     private void bulletAsteroidCollisions(Bullet bullet) {
         for (Collisionable collisionable : collisionables) {
             if (collisionable instanceof Asteroid) {
@@ -483,6 +664,10 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Gère les collisions du joueur avec les astéroïdes
+     * @param player Joueur
+     */
     private void playerAsteroidCollisions(Player player) {
         for (Collisionable collisionable : collisionables) {
             if (collisionable instanceof Asteroid) {
@@ -505,6 +690,12 @@ public class Jeu extends BasicGame {
         }
     }
 
+    /**
+     * Vérifie si la grandeur de l'astéroïde est assez petite pour être ramassé et si l'impact est en avant du joueur
+     * @param player Joueur
+     * @param asteroid Astéroïde
+     * @return Boolean qui est true si l'impact est valide
+     */
     private boolean canCollectAsteroid(Player player, Asteroid asteroid) {
         boolean canCollectAsteroid;
         if (modele.isInventoryFull()) {
@@ -536,6 +727,9 @@ public class Jeu extends BasicGame {
         return canCollectAsteroid;
     }
 
+    /**
+     * Désactive les fonctionnalités du jeu lors du voyage sur mars
+     */
     private void goToMars() {
         player.moveDown(false);
         player.moveLeft(false);

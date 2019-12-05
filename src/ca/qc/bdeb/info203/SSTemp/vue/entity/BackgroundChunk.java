@@ -10,7 +10,7 @@ import org.newdawn.slick.SpriteSheet;
 
 /**
  *
- * @author 1839083
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class BackgroundChunk extends Entity implements Mobile {
 
