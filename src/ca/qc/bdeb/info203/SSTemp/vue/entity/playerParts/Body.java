@@ -43,7 +43,7 @@ public class Body extends PlayerPart {
     private int frameCounter;
 
     /**
-     *
+     * Nombre de changement de couleur depuis les derniers degats
      */
     private int flickerCount;
 
@@ -57,16 +57,30 @@ public class Body extends PlayerPart {
      */
     private boolean flicker;
 
+    /**
+     * Constructeur de la partie principale du vaisseau
+     * 
+     * @param player Joueur sur lequel cette partie est attache
+     * @param spriteSheet Spritesheet qui contient les images de cette partie du vaisseau
+     * @param xOffset Offset de cette composante en X par rapport au Player
+     * @param yOffset Offset de cette composante en Y par rapport au Player
+     */
     public Body(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset) {
         super(player, spriteSheet, xOffset, yOffset);
         initIdleImage();
         initAbsorbAnimation();
     }
 
+    /**
+     * Initialise l'image lorsqu'il n'y a pas d'animation
+     */
     private void initIdleImage() {
         this.idleImage = getSpriteSheet().getSubImage(0, 0);
     }
 
+    /**
+     * Initialise l'animation du vaisseau lorsqu'il absorbe un asteroide
+     */
     private void initAbsorbAnimation() {
         this.absorbAnimation = new Animation();
         for (int i = 0; i < 3; i++) {
@@ -80,6 +94,9 @@ public class Body extends PlayerPart {
         this.absorbAnimation.stop();
     }
 
+    /**
+     * Indique a l'objet que le vaisseau a pris des degats
+     */
     public void takeDamage() {
         takeDamage = true;
     }
@@ -94,6 +111,9 @@ public class Body extends PlayerPart {
         }
     }
 
+    /**
+     * Trouve la couleur que cette partie du vaisseau devrait etre
+     */
     private void verifyRenderColor() {
         if (takeDamage) {
             if (frameCounter > FLICKER_LENGTH) {
@@ -118,6 +138,9 @@ public class Body extends PlayerPart {
         }
     }
 
+    /**
+     * Commence l'animation lorsque le vaisseau absorbe un asteroide
+     */
     public void startAnimation() {
         absorbAnimation.restart();
     }

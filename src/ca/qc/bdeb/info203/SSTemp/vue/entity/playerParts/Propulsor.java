@@ -9,16 +9,35 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
 /**
- *
+ * Propulseur du vaisseau
+ * 
  * @author Manuel Ramirez, Alexis Provost
  */
 public class Propulsor extends PlayerPart {
 
+    /**
+     * Angle de rotation du propulseur
+     */
     private int rotationAngle;
 
+    /**
+     * Image lorsque le vaisseau ne bouge pas
+     */
     private Image idleImage;
+    
+    /**
+     * Transition vers l'animation
+     */
     private Animation transition;
+    
+    /**
+     * Animation lorsque le vaisseau est en mouvement
+     */
     private Animation activeAnimation;
+    
+    /**
+     * Transition vers l'etat idle
+     */
     private Animation reverseTransition;
 
     /**
@@ -43,7 +62,7 @@ public class Propulsor extends PlayerPart {
     private int frameCounter;
 
     /**
-     *
+     * Nombre de changement de couleur depuis les derniers degats
      */
     private int flickerCount;
 
