@@ -48,13 +48,13 @@ public class Propulsor extends PlayerPart {
     /**
      * Nombre de frames ou l'image reste d'une couleur
      */
-    private final int FLICKER_LENGTH = 4;
+    private final int FLICKER_LENGTH = 3;
 
     /**
      * Nombre de fois que la couleur alterne lorsque le vaisseau prend des
      * degats
      */
-    private final int MAX_FLICKER_COUNT = 8;
+    private final int MAX_FLICKER_COUNT = 6;
 
     /**
      * Nombre de frame depuis le dernier changement de couleur
@@ -76,6 +76,14 @@ public class Propulsor extends PlayerPart {
      */
     private boolean flicker;
 
+    /**
+     * Constructeur du propulseur
+     * 
+     * @param player Joueur sur lequel cette partie est attache
+     * @param spriteSheet Spritesheet qui contient les images de cette partie du vaisseau
+     * @param xOffset Offset de cette composante en X par rapport au Player
+     * @param yOffset Offset de cette composante en Y par rapport au Player
+     */
     public Propulsor(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset) {
         super(player, spriteSheet, xOffset, yOffset);
         initIdleImage();
@@ -84,10 +92,16 @@ public class Propulsor extends PlayerPart {
         initReverseTransition();
     }
 
+    /**
+     * Initialise l'image du propulseur lorsque le vaisseau est immobile
+     */
     private void initIdleImage() {
         this.idleImage = getSpriteSheet().getSubImage(0, 0);
     }
 
+    /**
+     * Initialise la transition vers l'animation
+     */
     private void initTransition() {
         this.transition = new Animation();
         this.transition.addFrame(getSpriteSheet().getSubImage(1, 0), 100);
@@ -96,6 +110,9 @@ public class Propulsor extends PlayerPart {
         this.transition.stop();
     }
 
+    /**
+     * Initialise l'animation lorsque le vaisseau est en mouvement
+     */
     private void initActiveAnimation() {
         this.activeAnimation = new Animation();
         for (int i = 1; i < 3; i++) {
@@ -106,6 +123,9 @@ public class Propulsor extends PlayerPart {
         this.activeAnimation.stop();
     }
 
+    /**
+     * Intialise la transition vers l'etat idle
+     */
     private void initReverseTransition() {
         this.reverseTransition = new Animation();
         this.reverseTransition.addFrame(getSpriteSheet().getSubImage(2, 0), 50);
@@ -114,6 +134,11 @@ public class Propulsor extends PlayerPart {
         this.reverseTransition.stop();
     }
 
+    /**
+     * Verifie quel animation jouer
+     * 
+     * @param moving Si le vaisseau est en mouvement ou non
+     */
     public void verifyPropulsorState(boolean moving) {
         if (moving) {
             if (!transition.isStopped()) {
@@ -142,6 +167,9 @@ public class Propulsor extends PlayerPart {
         }
     }
 
+    /**
+     * Trouve la couleur que cette partie du vaisseau devrait etre
+     */
     private void verifyRenderColor() {
         if (takeDamage) {
             if (frameCounter > FLICKER_LENGTH) {
@@ -160,16 +188,25 @@ public class Propulsor extends PlayerPart {
         }
 
         if (flicker) {
-            renderColor = Color.transparent;
+            renderColor = Color.red;
         } else {
             renderColor = null;
         }
     }
 
+    /**
+     * Determine la rotaton du propulseur
+     * 
+     * @param x Vitesse en X du vaisseau
+     * @param y Vitesse en Y du vaisseau
+     */
     public void setPropulsorRotation(double x, double y) {
         this.rotationAngle = (int) Math.toDegrees(Math.atan2(y, x));
     }
 
+    /**
+     * Indique a l'objet que le vaisseau a pris des degats
+     */
     public void takeDamage() {
         takeDamage = true;
     }

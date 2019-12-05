@@ -29,13 +29,13 @@ public class Body extends PlayerPart {
     /**
      * Nombre de frames ou l'image reste d'une couleur
      */
-    private final int FLICKER_LENGTH = 4;
+    private final int FLICKER_LENGTH = 3;
 
     /**
      * Nombre de fois que la couleur alterne lorsque le vaisseau prend des
      * degats
      */
-    private final int MAX_FLICKER_COUNT = 8;
+    private final int MAX_FLICKER_COUNT = 6;
 
     /**
      * Nombre de frame depuis le dernier changement de couleur
@@ -132,7 +132,7 @@ public class Body extends PlayerPart {
         }
 
         if (flicker) {
-            renderColor = Color.transparent;
+            renderColor = Color.red;
         } else {
             renderColor = null;
         }

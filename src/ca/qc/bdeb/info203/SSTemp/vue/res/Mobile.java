@@ -5,7 +5,8 @@ import org.lwjgl.util.Rectangle;
 /**
  * Objet mobile du jeu.
  *
- * @author Mathieu Grenon, Stéphane Lévesque, Manuel Ramirez, Alexis Provost
+ * @author Manuel Ramirez, Alexis Provost
+ * @author Mathieu Grenon, Stéphane Lévesque
  */
 public interface Mobile {
 
@@ -17,5 +18,10 @@ public interface Mobile {
      */
     public void bouger(int limiteX, int limiteY);
 
+    /**
+     * La hitbox de l'object mobile
+     * 
+     * @return Rectangle qui sert de hitbox
+     */
     public Rectangle getRectangle();
 }
