@@ -10,37 +10,123 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
 
 /**
+ * Entite du joueur
  *
  * @author Manuel Ramirez, Alexis Provost
  */
 public class Player extends Entity implements Mobile, Collisionable {
 
+    /**
+     * Vitesse maximale du vaisseau
+     */
     private final int MAX_SPEED = 8;
+
+    /**
+     * Acceleration du vaisseau
+     */
     private final int ACCELERATION = 1;
 
+    /**
+     * Section principale du vaisseau
+     */
     private Body body;
+
+    /**
+     * Effet autour du core du vaisseau
+     */
     private CoreEffect coreEffect;
+
+    /**
+     * Core du vaisseau
+     */
     private CoreLaser coreLaser;
+
+    /**
+     * Propulseur droit du vaisseau
+     */
     private Propulsor rightPropulsor;
+
+    /**
+     * Propulseur gauche du vaisseau
+     */
     private Propulsor leftPropulsor;
 
-    private MarsState controllerMars;
+    /**
+     * Etat du vaisseau lors du voyage vers Mars
+     */
+    private MarsState marsState;
+
+    /**
+     * Calcule la couleur du core en fonction du nombre de roche dans
+     * l'inventaire
+     */
     private CoreColorPicker coreColorPicker;
 
+    /**
+     * Indique si le vaisseau se deplace vers le haut
+     */
     private boolean moveUp;
+
+    /**
+     * Indique si le vaisseau se deplace vers le bas
+     */
     private boolean moveDown;
+
+    /**
+     * Indique si le vaisseau se deplace vers la gauche
+     */
     private boolean moveLeft;
+
+    /**
+     * Indique si le vaisseau se deplace vers la droite
+     */
     private boolean moveRight;
+
+    /**
+     * Indique si le vaisseau est en train de tirer
+     */
     private boolean shootBullet;
 
+    /**
+     * Indique si le vaisseau a debute l'animation de tir
+     */
     private boolean bulletPending;
 
+    /**
+     * Chemin vers l'image du projectile
+     */
     private String bulletImagePath;
 
+    /**
+     * Vitesse du vaisseau en X
+     */
     private int speedX = 0;
+
+    /**
+     * Vitesse du vaisseau en Y
+     */
     private int speedY = 0;
 
-    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, String bulletImagePath, MarsState controllerMars, CoreColorPicker coreColorPicker) {
+    /**
+     * Constructeur du joueur
+     *
+     * @param x Position du joueur en X
+     * @param y Position du joueur en Y
+     * @param bodySpriteSheet Spritesheet qui contient les animations du body
+     * @param coreLaserSpriteSheet Spritesheet qui contient les animations du
+     * core
+     * @param coreEffectSpriteSheet Spritesheet qui contient les effets autour
+     * du core
+     * @param rightPropulsorSpriteSheet Spritesheet qui contient les animations
+     * du propulseur droit
+     * @param leftPropulsorSpriteSheet Spritesheet qui contient les animations
+     * du propulseur gauche
+     * @param bulletImagePath Chemin vers l'image du projectile
+     * @param marsState Etat du vaisseau lors du voyage vers Mars
+     * @param coreColorPicker Objet qui calcule la couleur du projectile en
+     * fonction du nombre de roche dans l'inventaire
+     */
+    public Player(int x, int y, SpriteSheet bodySpriteSheet, SpriteSheet coreLaserSpriteSheet, SpriteSheet coreEffectSpriteSheet, SpriteSheet rightPropulsorSpriteSheet, SpriteSheet leftPropulsorSpriteSheet, String bulletImagePath, MarsState marsState, CoreColorPicker coreColorPicker) {
         super(x, y, 128, 96);
         this.body = new Body(this, bodySpriteSheet, 22, 10);
         this.coreEffect = new CoreEffect(this, coreEffectSpriteSheet, 52, 33, coreColorPicker);
@@ -48,7 +134,7 @@ public class Player extends Entity implements Mobile, Collisionable {
         this.rightPropulsor = new Propulsor(this, rightPropulsorSpriteSheet, -20, 62);
         this.leftPropulsor = new Propulsor(this, leftPropulsorSpriteSheet, -20, 0);
         this.bulletImagePath = bulletImagePath;
-        this.controllerMars = controllerMars;
+        this.marsState = marsState;
         this.coreColorPicker = coreColorPicker;
     }
 
@@ -64,7 +150,7 @@ public class Player extends Entity implements Mobile, Collisionable {
     @Override
     public void bouger(int limiteX, int limiteY) {
         setSpeed();
-        if (controllerMars.isGamePaused()) {
+        if (marsState.isGamePaused()) {
             deplacementMars(limiteX, limiteY);
         } else {
             deplacementNormal(limiteX, limiteY);
@@ -76,6 +162,9 @@ public class Player extends Entity implements Mobile, Collisionable {
         leftPropulsor.setPropulsorRotation(speedX, speedY);
     }
 
+    /**
+     * Determine la vitesse en X et en Y du vaisseau
+     */
     private void setSpeed() {
         if (moveUp && speedY > -MAX_SPEED) {
             speedY -= ACCELERATION;
@@ -99,6 +188,11 @@ public class Player extends Entity implements Mobile, Collisionable {
         }
     }
 
+    /**
+     * Tire un nouveau projectile
+     *
+     * @return
+     */
     public Bullet shoot() {
         Bullet bullet = null;
         if (!coreLaser.isShooting() && bulletPending) {
@@ -113,6 +207,12 @@ public class Player extends Entity implements Mobile, Collisionable {
         return bullet;
     }
 
+    /**
+     * Deplace le vaisseau s'il n'est pas sur Mars
+     *
+     * @param limiteX Limite de l'ecran en X
+     * @param limiteY Limite de l'ecran en Y
+     */
     private void deplacementNormal(int limiteX, int limiteY) {
         boolean verificationX = getX() + speedX + getWidth() <= limiteX && getX() + speedX >= 0;
         boolean verificationY = getY() + speedY + getHeight() <= limiteY && getY() + speedY >= 0;
@@ -124,40 +224,52 @@ public class Player extends Entity implements Mobile, Collisionable {
         }
     }
 
+    /**
+     * Deplace le vaisseau s'il est sur Mars
+     *
+     * @param limiteX Limite de l'ecran en X
+     * @param limiteY Limite de l'ecran en Y
+     */
     private void deplacementMars(int limiteX, int limiteY) {
         setLocation(getX() + speedX, getY());
-        if (controllerMars.isGoingToMars()) {
+        if (marsState.isGoingToMars()) {
             if (getX() > limiteX + 500) {
                 setLocation(-(getWidth() + 500), (limiteY - getHeight()) / 2);
-                controllerMars.setGoingToMars(false);
-                controllerMars.setOnMars(true);
-                controllerMars.setHideAsteroids(true);
+                marsState.setGoingToMars(false);
+                marsState.setOnMars(true);
+                marsState.setHideAsteroids(true);
             }
-        } else if (controllerMars.isOnMars()) {
-            if (controllerMars.isLeavingMars()) {
+        } else if (marsState.isOnMars()) {
+            if (marsState.isLeavingMars()) {
                 if (getX() > limiteX + 500) {
-                    setLocation(-500, controllerMars.getInitialY());
-                    controllerMars.setOnMars(false);
-                    controllerMars.setRemoveParachute(true);
-                    controllerMars.setLeaveMars(false);
+                    setLocation(-500, marsState.getInitialY());
+                    marsState.setOnMars(false);
+                    marsState.setRemoveParachute(true);
+                    marsState.setLeaveMars(false);
                 }
             } else if (getX() > (limiteX - getWidth()) / 2) {
-                controllerMars.setSpawnParachute(true);
-                controllerMars.setLeaveMars(true);
+                marsState.setSpawnParachute(true);
+                marsState.setLeaveMars(true);
             }
-        } else if (getX() > controllerMars.getInitialX()) {
-            controllerMars.setResetAsteroid(true);
-            controllerMars.setGamePaused(false);
+        } else if (getX() > marsState.getInitialX()) {
+            marsState.setResetAsteroid(true);
+            marsState.setGamePaused(false);
             moveRight(false);
         }
     }
 
+    /**
+     * Commence l'animation des degats
+     */
     public void takeDamage() {
         body.takeDamage();
         rightPropulsor.takeDamage();
         leftPropulsor.takeDamage();
     }
 
+    /**
+     * Commence l'animation recolte d'asteroides
+     */
     public void collectAsteroid() {
         body.startAnimation();
     }

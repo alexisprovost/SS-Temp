@@ -9,21 +9,63 @@ import java.time.Instant;
  */
 public class Modele {
 
+    /**
+     * Points de vie maximaux du joueur
+     */
     private final int MAX_HEALTH = 384;
+
+    /**
+     * Espace maximal dans l'inventaire
+     */
     private final int MAX_INVENTORY = 16384;
+
+    /**
+     * Points de vie actuels du joueur
+     */
     private int health;
+
+    /**
+     * Espace utilise actuel dans l'inventaire
+     */
     private int rockInventory;
+
+    /**
+     * Quantite de roche deja envoyees sur Mars
+     */
     private int rockOnMars;
+
+    /**
+     * Indique si le joueur est mort
+     */
     private boolean playerIsDead = false;
-    private int nbEnvoieSurMars = 0;
+
+    /**
+     * Instant ou la partie a commence
+     */
     private Instant gameStart;
+
+    /**
+     * Instant actuel
+     */
     private Instant now;
+
+    /**
+     * Texte affichant le temps depuis le debut de la partie
+     */
     private String time = "";
 
+    /**
+     * Constructeur du modele
+     */
     public Modele() {
         this.health = MAX_HEALTH;
     }
 
+    /**
+     * Enleve de la vie au joueur en fonction de la taille de l'asteroide touche
+     *
+     * @param asteroidSize Taille de l'asteroide touche
+     */
     public void removeHealth(int asteroidSize) {
         switch (asteroidSize) {
             case 256:
@@ -51,23 +93,40 @@ public class Modele {
         }
     }
 
+    /**
+     * Remplit l'inventaire avec un asteroide
+     *
+     * @param asteroidSize Taille de l'asteroide rammasse
+     */
     public void fillInventory(int asteroidSize) {
         rockInventory += (asteroidSize * asteroidSize) / 2;
-        if (rockInventory > MAX_INVENTORY) {
+        if (isInventoryFull()) {
             rockInventory = MAX_INVENTORY;
         }
     }
 
+    /**
+     * Vide l'inventaire et envoit tout sur Mars
+     */
     public void envoyerSurMars() {
         rockOnMars += rockInventory;
         rockInventory = 0;
-        nbEnvoieSurMars++;
     }
 
+    /**
+     * Calcule la fraction de l'inventaire qui est remplie
+     *
+     * @return Fraction de l'inventaire qui est remplie
+     */
     public double getFilledPercentage() {
         return (double) rockInventory / (double) MAX_INVENTORY;
     }
 
+    /**
+     * Verifie si l'inventaire est plein
+     *
+     * @return True si l'inventaire est plein, false si non
+     */
     public boolean isInventoryFull() {
         return rockInventory >= MAX_INVENTORY;
     }
@@ -96,14 +155,18 @@ public class Modele {
         return playerIsDead;
     }
 
-    public int getNbEnvoieSurMars() {
-        return nbEnvoieSurMars;
-    }
-
+    /**
+     * Determine le debut de la partie
+     */
     public void startTime() {
         gameStart = Instant.now();
     }
 
+    /**
+     * Calcule le temps ecoule depuis le debut de la partie
+     *
+     * @return
+     */
     public String getElapsedTime() {
         if (!playerIsDead) {
             now = Instant.now();

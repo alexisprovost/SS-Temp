@@ -1,30 +1,31 @@
 package ca.qc.bdeb.info203.SSTemp;
 
 import ca.qc.bdeb.info203.SSTemp.vue.Jeu;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
 /**
  *
- * @author Stéphane Lévesque, Manuel Ramirez, Alexis Provost
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class Main {
 
-    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     /**
      * Largeur de l'écran.
      */
-    private static int screenWidth = (int) screenSize.getWidth();
+    private static int screenWidth;
     /**
      * Hauteur de l'écran.
      */
-    private static int screenHeight = (int) screenSize.getHeight();
+    private static int screenHeight;
 
     public static void main(String[] args) {
         try {
-            AppGameContainer app = new AppGameContainer(new Jeu(screenWidth, screenHeight));
+            AppGameContainer app = new AppGameContainer(new Jeu());
+
+            screenWidth = app.getScreenWidth();
+            screenHeight = app.getScreenHeight();
+
             //app.setMinimumLogicUpdateInterval(15);
             app.setDisplayMode(screenWidth, screenHeight, true);
             app.setShowFPS(false);

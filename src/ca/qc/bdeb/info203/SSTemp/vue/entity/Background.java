@@ -10,32 +10,71 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 /**
+ * Background du jeu
  *
  * @author Manuel Ramirez, Alexis Provost
  */
 public class Background extends Entity implements Mobile {
 
+    /**
+     * Longueur d'une tuile de la planete au bas de l'ecran
+     */
     private final int CHUNK_WIDTH = 192;
 
+    /**
+     * Chemin vers l'image de la planete
+     */
     private String planetImagePath;
+
+    /**
+     * Spritesheet qui contient les etoiles
+     */
     private SpriteSheet starSpriteSheet;
-    private Image marsBakcground;
 
-    private MarsState controllerMars;
+    /**
+     * Image du background quand le vaisseau est sur Mars
+     */
+    private Image marsBackground;
 
+    /**
+     * Etat du vaisseau lors du voyage vers Mars
+     */
+    private MarsState marsState;
+
+    /**
+     * Densite des etoiles dans le background
+     */
     private int density;
+
+    /**
+     * Liste qui contient toutes le tuiles du background
+     */
     private ArrayList<BackgroundChunk> backgroundChunks = new ArrayList<>();
 
-    public Background(int width, int height, int density, String planetImagePath, String marsImagePath, SpriteSheet starSpriteSheet, MarsState controllerMars) {
+    /**
+     * Constructeur du background
+     *
+     * @param width Largeur du background
+     * @param height Hauteur du background
+     * @param density Densite des etoiles dans le background
+     * @param planetImagePath Spritesheet qui contient les etoiles
+     * @param marsImagePath Image du background quand le vaisseau est sur Mars
+     * @param starSpriteSheet Spritesheet qui contient les etoiles
+     * @param marsState Etat du vaisseau lors du voyage vers Mars
+     */
+    public Background(int width, int height, int density, String planetImagePath, String marsImagePath, SpriteSheet starSpriteSheet, MarsState marsState) {
         super(0, 0, width, height);
         this.planetImagePath = planetImagePath;
         this.starSpriteSheet = starSpriteSheet;
         this.density = density;
-        this.controllerMars = controllerMars;
+        this.marsState = marsState;
         initBackgroundChunks();
         initMarsImage(marsImagePath);
     }
 
+    /**
+     * Initialise les sections du background necessaire pour remplir l'ecran
+     */
     private void initBackgroundChunks() {
         int nbPlanetChunk = (int) Math.ceil(((double) getWidth()) / CHUNK_WIDTH) + 1;
         for (int i = 0; i < nbPlanetChunk; i++) {
@@ -44,9 +83,14 @@ public class Background extends Entity implements Mobile {
         }
     }
 
+    /**
+     * Initialise l'image du background sur Mars
+     *
+     * @param marsImagePath Chemin vers l'image du background sur Mars
+     */
     private void initMarsImage(String marsImagePath) {
         try {
-            this.marsBakcground = new Image(marsImagePath);
+            this.marsBackground = new Image(marsImagePath);
         } catch (SlickException se) {
             System.out.println("SlickException :" + se);
             System.exit(1);
@@ -55,8 +99,8 @@ public class Background extends Entity implements Mobile {
 
     @Override
     public void dessiner(Graphics g) {
-        if (controllerMars.isOnMars()) {
-            g.drawImage(marsBakcground, 0, 0);
+        if (marsState.isOnMars()) {
+            g.drawImage(marsBackground, 0, 0);
         } else {
             for (BackgroundChunk planetChunk : backgroundChunks) {
                 planetChunk.dessiner(g);
@@ -66,7 +110,7 @@ public class Background extends Entity implements Mobile {
 
     @Override
     public void bouger(int limiteX, int limiteY) {
-        if (!controllerMars.isOnMars()) {
+        if (!marsState.isOnMars()) {
             for (BackgroundChunk backgroundChunk : backgroundChunks) {
                 backgroundChunk.bouger(limiteX, limiteY);
             }

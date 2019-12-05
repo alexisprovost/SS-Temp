@@ -29,8 +29,9 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
 /**
+ * Classe de base du jeu
  *
- * @author Mathieu Grenon, Stéphane Lévesque, Manuel Ramirez, Alexis Provost
+ * @author Manuel Ramirez, Alexis Provost
  */
 public class Jeu extends BasicGame {
 
@@ -204,13 +205,9 @@ public class Jeu extends BasicGame {
 
     /**
      * Constructeur de Jeu
-     * @param largeur Largeur de l'écran
-     * @param hauteur Hauteur de l'écran
      */
-    public Jeu(int largeur, int hauteur) {
+    public Jeu() {
         super("SS-Temp");
-        this.largeurEcran = largeur;
-        this.hauteurEcran = hauteur;
     }
 
     /**
@@ -220,6 +217,8 @@ public class Jeu extends BasicGame {
      */
     public void init(GameContainer container) throws SlickException {
         this.container = container;
+        this.largeurEcran = container.getWidth();
+        this.hauteurEcran = container.getHeight();
         loadSprites();
         loadFont();
         initializeGame();
@@ -231,7 +230,7 @@ public class Jeu extends BasicGame {
     private void initializeGame() {
         modele = new Modele();
         goToMarsNotice = null;
-        coreColorPicker = new CoreColorPicker(Color.red, new Color(166, 200, 252), modele);
+        coreColorPicker = new CoreColorPicker(new Color(255, 100, 0), new Color(166, 200, 252), modele);
         marsState = new MarsState();
 
         //Création de l'interface de l'utilisateur

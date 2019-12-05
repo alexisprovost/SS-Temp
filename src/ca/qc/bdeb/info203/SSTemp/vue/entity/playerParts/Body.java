@@ -5,21 +5,57 @@ import ca.qc.bdeb.info203.SSTemp.vue.entity.Player;
 import org.newdawn.slick.*;
 
 /**
+ * Section principale du vaisseau
  *
  * @author Manuel Ramirez, Alexis Provost
  */
 public class Body extends PlayerPart {
 
+    /**
+     * Image lorsqu'il n'y a pas d'animation
+     */
     private Image idleImage;
+
+    /**
+     * Animation lorsque le vaisseau absorbe un asteroide
+     */
     private Animation absorbAnimation;
+
+    /**
+     * Couleur du vaisseau
+     */
     private Color renderColor;
 
-    private final int FLICKER_LENGTH = 3;
-    private final int MAX_FLICKER_COUNT = 6;
+    /**
+     * Nombre de frames ou l'image reste d'une couleur
+     */
+    private final int FLICKER_LENGTH = 4;
+
+    /**
+     * Nombre de fois que la couleur alterne lorsque le vaisseau prend des
+     * degats
+     */
+    private final int MAX_FLICKER_COUNT = 8;
+
+    /**
+     * Nombre de frame depuis le dernier changement de couleur
+     */
     private int frameCounter;
+
+    /**
+     *
+     */
     private int flickerCount;
+
+    /**
+     * Indique si le vaisseau a pris des degats
+     */
     private boolean takeDamage;
-    private boolean redFlicker;
+
+    /**
+     * Indique si le vaisseau est invisible ou non
+     */
+    private boolean flicker;
 
     public Body(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset) {
         super(player, spriteSheet, xOffset, yOffset);
@@ -65,18 +101,18 @@ public class Body extends PlayerPart {
                 frameCounter = 0;
                 if (flickerCount > MAX_FLICKER_COUNT) {
                     flickerCount = 0;
-                    redFlicker = false;
+                    flicker = false;
                     takeDamage = false;
                 } else {
-                    redFlicker = !redFlicker;
+                    flicker = !flicker;
                 }
             } else {
                 frameCounter++;
             }
         }
 
-        if (redFlicker) {
-            renderColor = Color.red;
+        if (flicker) {
+            renderColor = Color.transparent;
         } else {
             renderColor = null;
         }
