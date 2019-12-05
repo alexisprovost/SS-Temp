@@ -8,19 +8,37 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 /**
- *
+ * Classe d'écran de mort
  * @author Manuel Ramirez, Alexis Provost
  */
 public class DeathScreen extends Entity {
-
+    /**
+     * Modèle du jeu
+     */
     private Modele modele;
+    /**
+     * Image de fond de l'écran de mort
+     */
     private Image deathBg;
+    /**
+     * Largeur de l'écran
+     */
     private int largeurEcran;
+    /**
+     * Longeur de l'écran
+     */
     private int longeurEcran;
 
-    public DeathScreen(Modele modele, String imagePath, int largeurEcran, int longeurEcran) {
+    /**
+     * Constructeur d'écran de mort
+     * @param modele Modèle du jeu
+     * @param imagePath Chemin de l'image
+     * @param largeurEcran Largeur de l'écran
+     * @param hauteurEcran Hauteur de l'écran
+     */
+    public DeathScreen(Modele modele, String imagePath, int largeurEcran, int hauteurEcran) {
         this.largeurEcran = largeurEcran;
-        this.longeurEcran = longeurEcran;
+        this.longeurEcran = hauteurEcran;
         this.modele = modele;
 
         try {
@@ -31,6 +49,7 @@ public class DeathScreen extends Entity {
         }
     }
 
+    
     @Override
     public void dessiner(Graphics g) {
         g.drawImage(deathBg, 0, 0);

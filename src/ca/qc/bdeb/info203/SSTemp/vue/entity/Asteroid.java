@@ -9,22 +9,58 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
 
 /**
- * 
+ * Classe Astéroide
  * @author Manuel Ramirez, Alexis Provost
  */
 public class Asteroid extends Entity implements Mobile, Collisionable {
-
+    /**
+     * Controlleur Mars
+     */
     private MarsState controllerMars;
 
+    /**
+     * L'astéroide est à séparer
+     */
     private boolean split = false;
 
+    /**
+     * Vitesse en x
+     */
     private int xSpeed;
+    /**
+     * Vitesse en y
+     */
     private int ySpeed;
+    /**
+     * Vitesse  Maximale
+     */
     private int maxSpeed = 10;
+    /**
+     * Espace en dehors de l'écran pour le spawn des Astéroides
+     */
     private int extraSpace = 500;
+    /**
+     * Hauteur de l'écran
+     */
     private int hauteurEcran = 0;
+    /**
+     * Largeur de l'écran
+     */
     private int largeurEcran = 0;
 
+    /**
+     * Constructeur d'astéroide
+     * @param x Postion initilale en x
+     * @param y Postion initilale en y
+     * @param spriteSheet Sprite d'astéroide
+     * @param ligne Ligne pour texture
+     * @param colonne Colonne pour texture
+     * @param width Largeur de l'astéroide
+     * @param height Hauteur de l'astéroide
+     * @param controllerMars Controlleur des voyages sur Mars
+     * @param hauteurEcran Hauteur de l'écran
+     * @param largeurEcran Largeur de l'écran
+     */
     public Asteroid(int x, int y, SpriteSheet spriteSheet, int ligne, int colonne, int width, int height, MarsState controllerMars, int hauteurEcran, int largeurEcran) {
         super(x, y, spriteSheet, ligne, colonne, width, height);
         this.controllerMars = controllerMars;
@@ -35,6 +71,10 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
         chooseRandomSprite(spriteSheet, rnd);
     }
 
+    /**
+     * Méthode qui choisi au hasard une nouvelle vitesse
+     * @param rnd Objet Random
+     */
     private void chooseRandomSpeed(Random rnd) {
         xSpeed = -rnd.nextInt(maxSpeed);
 
@@ -50,6 +90,11 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
         }
     }
 
+    /**
+     * Choix au hasard des textures avec le Sprite
+     * @param spriteSheet Sprite sheet d'astéroid
+     * @param rnd Objet Random
+     */
     private void chooseRandomSprite(SpriteSheet spriteSheet, Random rnd) {
         int randomSprite = rnd.nextInt(4);
         switch (getWidth()) {
@@ -74,6 +119,10 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
         }
     }
 
+    /**
+     * Affiche l'astéroid
+     * @param g Graphics Slick 2D
+     */
     @Override
     public void dessiner(Graphics g) {
         if (!controllerMars.isHideAsteroids()) {
@@ -81,31 +130,60 @@ public class Asteroid extends Entity implements Mobile, Collisionable {
         }
     }
 
+    /**
+     * Retourne si il doit être Split
+     * @return Boolean à split
+     */
     public boolean getSplit() {
         return split;
     }
 
+    /**
+     * Setter qui change la vitesse de l'astéroid en x
+     * @param xSpeed Int nouvelle vitesse en x
+     */
     public void setxSpeed(int xSpeed) {
         this.xSpeed = xSpeed;
     }
 
+    /**
+     * Setter qui change la vitesse de l'astéroid en y
+     * @param ySpeed Int nouvelle vitesse en y
+     */
     public void setySpeed(int ySpeed) {
         this.ySpeed = ySpeed;
     }
 
+    /**
+     * Getter de la vitesse en x
+     * @return Int de la vitesse en x
+     */
     public int getxSpeed() {
         return xSpeed;
     }
 
+    /**
+     * Getter de la vitesse en y
+     * @return Int de la vitesse en y
+     */
     public int getySpeed() {
         return ySpeed;
     }
 
+    /**
+     * Setter si split ou non
+     * @param split Boolean si à split out non
+     */
     public void setSplit(boolean split) {
         this.split = split;
         setDetruire(true);
     }
 
+    /**
+     * Bouger l'astéroid
+     * @param limiteX Limite de l'écran en X
+     * @param limiteY Limite de l'écran en Y
+     */
     @Override
     public void bouger(int limiteX, int limiteY) {
         Random rnd = new Random();
