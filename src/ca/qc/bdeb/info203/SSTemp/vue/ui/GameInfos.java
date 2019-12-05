@@ -10,14 +10,24 @@ import ca.qc.bdeb.info203.SSTemp.vue.res.Entity;
 import org.newdawn.slick.Graphics;
 
 /**
- *
+ * Classe Information de jeu Score et Timer
  * @author Manuel Ramirez, Alexis Provost
  */
 public class GameInfos extends Entity{
-    
+    /**
+     * Modèle de jeu
+     */
     private Modele modele;
+    /**
+     * Largeur d'écran
+     */
     private int screenWidth;
 
+    /**
+     * Constructeur des informations de jeu
+     * @param modele Modèle de jeu
+     * @param screenWidth Laurgeur d'écran
+     */
     public GameInfos(Modele modele, int screenWidth) {
         this.modele = modele;
         this.screenWidth = screenWidth;

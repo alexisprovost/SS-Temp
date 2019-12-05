@@ -13,11 +13,29 @@ import org.newdawn.slick.SlickException;
  * @author Manuel Ramirez, Alexis Provost
  */
 public class InventoryBar extends Entity {
-
+    /**
+     * Modèle du jeu
+     */
     private Modele modele;
+    /**
+     * Choix de couleur
+     */
     private CoreColorPicker coreColorPicker;
+    /**
+     * Image d'icone de roche
+     */
     private Image rockImage;
 
+    /**
+     * Constructeur Barre d'inventaire
+     * 
+     * @param x Position en x
+     * @param y Position en y
+     * @param imagePath Chemin du fichier d'image de la barre
+     * @param rockImagePath Chemin de l'icone de la roche
+     * @param modele Modèle du jeu
+     * @param coreColorPicker Choix de couleur barre
+     */
     public InventoryBar(int x, int y, String imagePath, String rockImagePath, Modele modele, CoreColorPicker coreColorPicker) {
         super(x, y, imagePath);
         this.modele = modele;

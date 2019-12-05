@@ -5,12 +5,18 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
 
 /**
- *
+ * Classe Player Part
  * @author Manuel Ramirez, Alexis Provost
  */
 public abstract class PlayerPart {
-
+    /**
+     * Offset des parts su vaisseau en x
+     */
     private final int X_OFFSET;
+    
+    /**
+     * Offset des parts su vaisseau en Y
+     */
     private final int Y_OFFSET;
 
     /**
@@ -22,10 +28,23 @@ public abstract class PlayerPart {
      */
     private int height;
 
+    /**
+     * Joueur
+     */
     private Player player;
 
+    /**
+     * Sprite sheet parts vaisseau
+     */
     private SpriteSheet spriteSheet;
 
+    /**
+     * Constructeur Player parts
+     * @param player Objet Joueur
+     * @param spriteSheet Sprite sheet player parts
+     * @param xOffset Offset des parts su vaisseau en x
+     * @param yOffset Offset des parts su vaisseau en y
+     */
     public PlayerPart(Player player, SpriteSheet spriteSheet, int xOffset, int yOffset) {
         this.player = player;
         this.X_OFFSET = xOffset;
